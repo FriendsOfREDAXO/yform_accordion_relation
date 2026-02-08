@@ -2,8 +2,6 @@
 
 Erweitert das bestehende YForm-Feld `be_manager_relation` (Typ 5 = Inline) um eine **Accordion-Darstellung**. Inline-Relationen werden als kompakte, auf- und zuklappbare Panels dargestellt – ideal bei vielen Einträgen.
 
-![Accordion Relation](https://raw.githubusercontent.com/FriendsOfREDAXO/yform_accordion_relation/main/screenshot.png)
-
 ## Features
 
 - **Accordion-Panels** – jeder Inline-Datensatz als auf-/zuklappbares Bootstrap-Panel

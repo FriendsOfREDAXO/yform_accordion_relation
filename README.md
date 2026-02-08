@@ -23,8 +23,8 @@ Erweitert das bestehende YForm-Feld `be_manager_relation` (Typ 5 = Inline) um ei
 ## Voraussetzungen
 
 - REDAXO ≥ 5.19.1
-- PHP ≥ 8.1
-- YForm ≥ 4.0
+- PHP ≥ 8.2
+- YForm ≥ 5.0
 
 ## Installation
 

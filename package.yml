@@ -1,0 +1,11 @@
+package: yform_accordion_relation
+version: '1.0.0'
+author: 'Friends Of REDAXO'
+supportpage: https://github.com/FriendsOfREDAXO/yform_accordion_relation
+
+requires:
+    redaxo: '^5.19.1'
+    php:
+        version: '>=8.1'
+    packages:
+        yform: '>4.0'

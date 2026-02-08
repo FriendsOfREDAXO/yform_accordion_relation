@@ -1,0 +1,16 @@
+yform_accordion_relation_title = Accordion Relation
+yform_accordion_relation_description = Inline relation (1-n) displayed as accordion
+yform_accordion_relation_new_entry = New entry
+yform_accordion_relation_add = Add
+yform_accordion_relation_delete = Delete
+yform_accordion_relation_move_up = Move up
+yform_accordion_relation_move_down = Move down
+yform_accordion_relation_count_label = entries
+yform_accordion_relation_settings = Settings
+yform_accordion_relation_search = Search entries…
+yform_accordion_relation_search_clear = Clear search
+yform_accordion_relation_expand_all = Expand all
+yform_accordion_relation_collapse_all = Collapse all
+yform_accordion_relation_empty = No entries available
+yform_accordion_relation_delete_confirm = Click = permanently delete
+yform_accordion_relation_info = Extends be_manager_relation (type 5 = inline) with accordion display. Activation via attribute: {"accordion": true}. No custom value – template overrides only.

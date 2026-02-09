@@ -271,6 +271,98 @@ $(document).on('rex:ready', function (event, container) {
     }
 
     // =========================================================================
+    // STATUS TOGGLE (Button im Header zum schnellen Umschalten)
+    // =========================================================================
+
+    function initStatusToggle($item) {
+        var $wrapper = $item.closest('.yform-accordion-relation');
+        var statusField = $wrapper.attr('data-yform-accordion-status-field');
+        if (!statusField) return;
+
+        var $toggleBtn = $item.find('[data-yform-accordion-status-toggle]').first();
+        if (!$toggleBtn.length) return;
+
+        var $statusInput = findTitleInput($item, statusField);
+        if (!$statusInput || !$statusInput.length) return;
+
+        // Button sichtbar machen
+        $toggleBtn.show();
+
+        // Mögliche Werte ermitteln
+        var possibleValues = ['0', '1'];
+        var valueLabels = {'0': 'Offline', '1': 'Online', '2': 'Entwurf'};
+        if ($statusInput.is('select')) {
+            possibleValues = [];
+            $statusInput.find('option').each(function () {
+                var v = $(this).val();
+                possibleValues.push(v);
+                valueLabels[v] = $.trim($(this).text()) || v;
+            });
+        }
+
+        function getCurrentVal() {
+            if ($statusInput.is('input[type="checkbox"]')) {
+                return $statusInput.is(':checked') ? '1' : '0';
+            }
+            return $.trim($statusInput.val() || '0');
+        }
+
+        function syncToggleBtn() {
+            var val = getCurrentVal();
+            $toggleBtn.attr('data-status-val', val);
+            var label = valueLabels[val] || ('Status: ' + val);
+            $toggleBtn.attr('title', label + ' – Klicken zum Umschalten');
+        }
+
+        syncToggleBtn();
+
+        // Klick: nächsten Wert setzen
+        if (!$toggleBtn.data('accordion-toggle-bound')) {
+            $toggleBtn.data('accordion-toggle-bound', true);
+            $toggleBtn.on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var current = getCurrentVal();
+                var nextIndex = (possibleValues.indexOf(current) + 1) % possibleValues.length;
+                var nextVal = possibleValues[nextIndex];
+
+                if ($statusInput.is('input[type="checkbox"]')) {
+                    $statusInput.prop('checked', nextVal === '1');
+                } else {
+                    $statusInput.val(nextVal);
+                }
+                $statusInput.trigger('change');
+                syncToggleBtn();
+            });
+        }
+
+        // Sync wenn Status sich anderweitig ändert
+        if (!$statusInput.data('accordion-toggle-sync')) {
+            $statusInput.data('accordion-toggle-sync', true);
+            $statusInput.on('change', function () {
+                syncToggleBtn();
+            });
+        }
+    }
+
+    container.find('.yform-accordion-item').each(function () {
+        initStatusToggle($(this));
+    });
+
+    // Retry für verzögert geladene Subforms
+    setTimeout(function () {
+        container.find('.yform-accordion-item').each(function () {
+            initStatusToggle($(this));
+        });
+    }, 200);
+    setTimeout(function () {
+        container.find('.yform-accordion-item').each(function () {
+            initStatusToggle($(this));
+        });
+    }, 600);
+
+    // =========================================================================
     // DELETE (nutzt REDAXO data-confirm für Bestätigung)
     // =========================================================================
 
@@ -411,6 +503,9 @@ $(document).on('rex:ready', function (event, container) {
 
             // Status-Farbe initialisieren
             initStatusColor($newItem.find('.yform-accordion-item').addBack('.yform-accordion-item'));
+
+            // Status-Toggle initialisieren
+            initStatusToggle($newItem.find('.yform-accordion-item').addBack('.yform-accordion-item'));
 
             // Zum neuen Element scrollen
             if ($newItem.length) {

@@ -83,6 +83,7 @@ echo '<div class="panel panel-default yform-accordion-item' . $newClass . '" id=
                 <span class="yform-accordion-title-text">' . rex_escape($accordionTitle) . '</span>
             </a>
             <span class="yform-accordion-actions">
+                <button type="button" class="btn btn-xs yform-accordion-status-toggle" data-yform-accordion-status-toggle="' . $counterfieldkey . '" data-status-val="" title="Status umschalten" style="display:none"><span class="yform-status-dot"></span></button>
                 ' . $sortButtons . '
                 <button type="button" class="btn btn-xs btn-default" data-yform-accordion-add="' . $counterfieldkey . '" data-yform-accordion-add-position="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '"><i class="rex-icon rex-icon-add-module"></i></button>
                 <button type="button" class="btn btn-xs btn-danger" data-yform-accordion-delete="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_delete')) . '"><i class="rex-icon rex-icon-delete"></i></button>

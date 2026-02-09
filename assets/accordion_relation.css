@@ -52,22 +52,26 @@
    Header
    ========================================================================== */
 
+.yform-accordion-item > .panel-heading {
+    padding: 5px 8px;
+}
+
 .yform-accordion-header {
     display: flex;
     align-items: center;
     margin: 0;
-    min-height: 32px;
+    min-height: 26px;
 }
 
 .yform-accordion-toggle {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     color: #333;
     text-decoration: none !important;
     font-weight: 500;
-    padding: 2px 0;
+    padding: 0;
     cursor: pointer;
     user-select: none;
 }
@@ -105,6 +109,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 500px;
+    font-size: 14px;
+    line-height: 1.3;
 }
 
 /* ==========================================================================
@@ -149,9 +155,9 @@
 .yform-accordion-sorthandle {
     cursor: move;
     cursor: grab;
-    padding: 0 8px 0 4px;
+    padding: 0 6px 0 2px;
     color: #ccc;
-    font-size: 14px;
+    font-size: 13px;
     display: flex;
     align-items: center;
 }
@@ -169,13 +175,13 @@
    ========================================================================== */
 
 .yform-accordion-body {
-    padding: 15px;
+    padding: 10px 12px;
     background-color: rgba(250, 250, 250, 0.08);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .yform-accordion-body .form-group {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .yform-accordion-body .form-group:last-child {
@@ -187,13 +193,32 @@
    ========================================================================== */
 
 .yform-accordion-add-wrapper {
-    margin-top: 8px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.yform-accordion-add-wrapper .btn {
+.yform-accordion-add-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    padding: 6px 14px;
+    font-size: 13px;
+    border: 1px solid #222;
+    background-color: #333;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.yform-accordion-add-btn:hover,
+.yform-accordion-add-btn:focus {
+    border-color: #111;
+    background-color: #222;
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
 }
 
 /* ==========================================================================
@@ -371,6 +396,57 @@
    ========================================================================== */
 
 /* Delete-Bestätigung läuft über nativen Browser-Dialog (confirm) */
+
+/* ==========================================================================
+   Status Toggle Button
+   ========================================================================== */
+
+.yform-accordion-status-toggle {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+}
+
+.yform-accordion-status-toggle .yform-status-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #999;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.yform-accordion-status-toggle:hover .yform-status-dot {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Status 0 = Offline: roter Ring, nicht gefüllt */
+.yform-accordion-status-toggle[data-status-val="0"] .yform-status-dot {
+    background-color: transparent;
+    border: 2px solid #d9534f;
+}
+
+/* Status 1 = Online: gefüllt grün */
+.yform-accordion-status-toggle[data-status-val="1"] .yform-status-dot {
+    background-color: #3c763d;
+    border: none;
+}
+
+/* Status 2 = Entwurf: gefüllt grau */
+.yform-accordion-status-toggle[data-status-val="2"] .yform-status-dot {
+    background-color: #999;
+    border: none;
+}
 
 /* ==========================================================================
    Nested Accordion: kein Accordion-Styling für verschachtelte

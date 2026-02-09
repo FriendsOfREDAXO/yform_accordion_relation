@@ -200,9 +200,7 @@ foreach ($forms as $form) {
 echo '
         </div>
         <div class="yform-accordion-add-wrapper">
-            <div class="btn-group btn-group-xs">
-                <button type="button" class="btn btn-default" data-yform-accordion-add="' . $fieldkey . '-' . $counter . '"><i class="rex-icon rex-icon-add-module"></i> ' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '</button>
-            </div>
+            <button type="button" class="btn btn-default yform-accordion-add-btn" data-yform-accordion-add="' . $fieldkey . '-' . $counter . '"><i class="rex-icon rex-icon-add-module"></i> ' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '</button>
             <span data-yform-accordion-count class="yform-accordion-counter"><small>' . count($forms) . ' ' . rex_i18n::msg('yform_accordion_relation_count_label') . '</small></span>
         </div>
         ' . $notice . '

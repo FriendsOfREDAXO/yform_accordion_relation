@@ -18,6 +18,37 @@ Erweitert das bestehende YForm-Feld `be_manager_relation` (Typ 5 = Inline) um ei
 - **Dark-Mode-kompatibel** – funktioniert mit dem REDAXO Dark Theme
 - **100 % kompatibel** – kein eigenes Value, kein neuer Feldtyp, alle YForm-Core-Funktionen bleiben erhalten
 
+## Erweiterbarkeit (Extension Points)
+
+Das Addon stellt zwei Extension Points zur Verfügung, um eigene Buttons/Inhalte in die Toolbar oder den Panel-Header zu injizieren:
+
+### `YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS`
+
+Fügt Buttons in die Toolbar (neben "Alle aufklappen") ein.
+
+```php
+rex_extension::register('YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS', function (rex_extension_point $ep) {
+    // $field = $ep->getParam('field'); // Das YForm Value Objekt
+    // $fieldkey = $ep->getParam('fieldkey');
+    // $relationKey = $ep->getParam('relationKey');
+    
+    return '<button type="button" class="btn btn-default" onclick="alert(\'Info\')"><i class="rex-icon fa-info"></i></button>';
+});
+```
+
+### `YFORM_ACCORDION_RELATION_ITEM_BUTTONS`
+
+Fügt Buttons rechts in den Header eines jeden Accordion-Items (neben Löschen/Verschieben) ein.
+
+```php
+rex_extension::register('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', function (rex_extension_point $ep) {
+    // $counterfieldkey = $ep->getParam('counterfieldkey');
+    // $accordionIsNew = $ep->getParam('accordionIsNew');
+    
+    return '<button type="button" class="btn btn-xs btn-default"><i class="rex-icon fa-flag"></i></button>';
+});
+```
+
 ## Voraussetzungen
 
 - REDAXO ≥ 5.19.1

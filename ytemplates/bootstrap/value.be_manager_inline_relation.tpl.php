@@ -200,6 +200,12 @@ echo '
                 <div class="yform-accordion-toolbar-actions btn-group btn-group-xs">
                     <button type="button" class="btn btn-default" data-yform-accordion-expand-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_expand_all')) . '"><i class="rex-icon fa-server"></i></button>
                     <button type="button" class="btn btn-default" data-yform-accordion-collapse-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_collapse_all')) . '"><i class="rex-icon fa-bars"></i></button>
+                    ' . rex_extension::registerPoint(new rex_extension_point('YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS', '', [
+                        'field' => $this,
+                        'fieldkey' => $fieldkey,
+                        'relationKey' => $relationKey,
+                        'attributes' => $attributes,
+                    ])) . '
                 </div>
             </div>
             <div data-yform-accordion-items="' . $fieldkey . '" ' . $sortable . ' class="yform-accordion-wrapper panel-group">';

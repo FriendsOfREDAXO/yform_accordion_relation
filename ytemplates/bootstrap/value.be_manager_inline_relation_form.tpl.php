@@ -87,6 +87,12 @@ echo '<div class="panel panel-default yform-accordion-item' . $newClass . '" id=
                 ' . $sortButtons . '
                 <button type="button" class="btn btn-xs btn-default" data-yform-accordion-add="' . $counterfieldkey . '" data-yform-accordion-add-position="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '"><i class="rex-icon rex-icon-add-module"></i></button>
                 <button type="button" class="btn btn-xs btn-danger" data-yform-accordion-delete="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_delete')) . '"><i class="rex-icon rex-icon-delete"></i></button>
+                ' . rex_extension::registerPoint(new rex_extension_point('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', '', [
+                    'field' => $this,
+                    'counterfieldkey' => $counterfieldkey,
+                    'form' => $form,
+                    'accordionIsNew' => $accordionIsNew,
+                ])) . '
             </span>
         </h4>
     </div>

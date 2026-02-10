@@ -517,6 +517,123 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // =========================================================================
+    // DUPLICATE: Eintrag duplizieren
+    // =========================================================================
+
+    container.find('[data-yform-accordion-duplicate]').each(function () {
+        $(this).on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var $btn = $(this);
+            var $sourceItem = $btn.closest('.yform-accordion-item');
+            var $wrapper = $btn.closest('[data-yform-accordion-form]');
+            
+             // Fallback: Falls Button nicht direkt im Wrapper (sollte aber so sein)
+             if (!$wrapper.length) {
+                // Suche Wrapper rekursiv
+                $wrapper = $btn.closest('.yform-accordion-relation');
+             }
+
+            if (!$sourceItem.length || !$wrapper.length) return;
+
+            // 1. Neuen Eintrag vorbereiten
+            var relationKey = $wrapper.attr('data-yform-accordion-key');
+            var prototypeForm = $wrapper.attr('data-yform-accordion-form');
+            var index = parseInt($wrapper.attr('data-yform-accordion-index'), 10);
+            var newLabel = $wrapper.attr('data-yform-accordion-new-label') || 'Neuer Eintrag';
+
+            ++index;
+            $wrapper.attr('data-yform-accordion-index', index);
+
+            // Relation-Key durch neuen Index ersetzen
+            var rep = new RegExp(escapeRegExp(relationKey), 'g');
+            prototypeForm = prototypeForm.replace(rep, index);
+
+            var $newItem = $(prototypeForm);
+
+            // Titel vorläufig setzen
+            $newItem.find('.yform-accordion-title-text').first().text(newLabel + ' #' + index + ' (Kopie)');
+            
+            // Accordion öffnen
+            $newItem.find('.panel-collapse').addClass('in');
+            $newItem.find('.yform-accordion-toggle').removeClass('collapsed');
+            $newItem.addClass('yform-accordion-item-new');
+
+            // 2. Einfügen nach dem Quell-Element
+            $sourceItem.after($newItem);
+
+            // 3. Werte kopieren
+            // Wir selektieren nur Inputs mit 'name' Attribut, um dynamisch eingefügte
+            // UI-Elemente (z.B. Select2 Search-Felder ohne Name) zu ignorieren.
+            var $sourceInputs = $sourceItem.find(':input[name]');
+            var $newInputs = $newItem.find(':input[name]');
+            
+            // Ermitteln, welches Feld das Titelfeld ist (für "Kopie" Suffix)
+            var titleFieldName = $wrapper.attr('data-yform-accordion-title-field');
+            var titleFieldFound = false;
+
+            $newInputs.each(function() {
+                 var $dest = $(this);
+                 var destName = $dest.attr('name');
+                 if (!destName) return;
+                 
+                 // Ignorieren: ID-Felder (sollen neu generiert oder leer sein)
+                 if (destName.match(/\[id\]$/)) {
+                     $dest.val(''); // ID leeren
+                     return;
+                 }
+
+                 // Wir nutzen die DOM-Reihenfolge (Index), da Struktur identisch
+                 var idx = $newInputs.index($dest);
+                 if (idx >= 0 && idx < $sourceInputs.length) {
+                     var $src = $sourceInputs.eq(idx);
+                     
+                     // Sicherheitscheck: Types sollten gleich sein
+                     if ($src.attr('type') !== $dest.attr('type')) return;
+                     
+                     // Wert kopieren
+                     var val = $src.val();
+                     if ($dest.is(':checkbox') || $dest.is(':radio')) {
+                         $dest.prop('checked', $src.prop('checked'));
+                     } else {
+                         // Ist dies das Titelfeld? Dann " (Kopie)" anhängen
+                         // Wir prüfen, ob der Name des Feldes (input name) den titleFieldName beinhaltet
+                         // Das ist etwas tricky, da input names komplex sind (yform[...][field][1][name])
+                         if (titleFieldName && !titleFieldFound && $dest.attr('type') === 'text') {
+                             // Einfacher Check: Endet der Name auf [titleFieldName]?
+                             if (destName.indexOf('[' + titleFieldName + ']') !== -1) {
+                                 val = val + ' (' + (typeof rex !== "undefined" && rex.yform_accordion_relation_copy_suffix ? rex.yform_accordion_relation_copy_suffix : 'Kopie') + ')';
+                                 titleFieldFound = true;
+                             }
+                         }
+                         
+                         $dest.val(val);
+                     }
+                 }
+            });
+
+            // 4. Initialisieren
+            $newItem.trigger('rex:ready', [$newItem]);
+            
+            // Title Watcher triggern (damit der kopierte Titel übernommen wird)
+            initTitleWatcher($newItem.find('.yform-accordion-item').addBack('.yform-accordion-item'));
+            
+            var $itemsWrapper = $wrapper.find('[data-yform-accordion-items]');
+            updateCounter($itemsWrapper);
+            updateEmptyState($itemsWrapper);
+            
+            initStatusColor($newItem.find('.yform-accordion-item').addBack('.yform-accordion-item'));
+            initStatusToggle($newItem.find('.yform-accordion-item').addBack('.yform-accordion-item'));
+
+            // Scrollen
+            $('html, body').animate({
+                scrollTop: $newItem.offset().top - 100
+            }, 300);
+        });
+    });
+
+    // =========================================================================
     // VALIDATION ERROR: Panels mit Fehlern auto-öffnen
     // =========================================================================
 

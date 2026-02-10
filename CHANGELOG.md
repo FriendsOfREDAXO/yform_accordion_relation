@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.3.0] - 2026-02-10
+- Feature: Added "Duplicate" button to accordion items via `fa-copy` icon (copies all visible inputs, resets IDs)
+
 ## [1.2.0] - 2026-02-10
 - Feature: Toolbar actions are now grouped in a `btn-group` button group
 - Feature: Added Extension Point `YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS` for custom toolbar actions

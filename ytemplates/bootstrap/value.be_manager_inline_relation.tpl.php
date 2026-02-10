@@ -110,14 +110,47 @@ $statusField = $attributes['accordion_status_field'] ?? '';
 
 // Titelfeld auto-erkennen wenn nicht explizit gesetzt
 if ('' === $titleField) {
-    // Versuche das erste Feld aus "target_field" zu nehmen (= das Anzeigefeld)
-    $targetField = $this->getElement('field');
-    if ('' !== $targetField && null !== $targetField) {
-        $parts = explode(',', $targetField);
-        $firstField = trim($parts[0]);
-        if ('' !== $firstField) {
-            $titleField = $firstField;
+    // Versuche, ein geeignetes Feld automatisch zu ermitteln
+    $targetTable = $this->getElement('table');
+    $targetTableObj = rex_yform_manager_table::get($targetTable);
+    
+    if ($targetTableObj) {
+        // Liste von Typen, die sich nicht als Titel eignen (keine echten Eingabefelder oder reine UI)
+        $invalidTypes = ['html', 'php', 'index', 'upload', 'action', 'validate'];
+
+        // 1. Zuerst in der Relation-Definition schauen (target_field)
+        $targetFieldAttr = $this->getElement('field');
+        if ('' !== $targetFieldAttr && null !== $targetFieldAttr) {
+            $parts = explode(',', $targetFieldAttr);
+            foreach ($parts as $part) {
+                $fName = trim($part);
+                if ('' === $fName) continue;
+                if ('id' === $fName) {
+                    $titleField = 'id';
+                    break;
+                }
+                $f = $targetTableObj->getValueField($fName);
+                if ($f && !in_array($f->getTypeName(), $invalidTypes, true)) {
+                    $titleField = $fName;
+                    break;
+                }
+            }
         }
+
+        // 2. Fallback: Erstes sinnvolles Text/Input-Feld aus der Tabelle nehmen
+        if ('' === $titleField) {
+            foreach ($targetTableObj->getValueFields() as $f) {
+                if (!in_array($f->getTypeName(), $invalidTypes, true)) {
+                    $titleField = $f->getName();
+                    break;
+                }
+            }
+        }
+    }
+
+    // 3. Letzter Fallback: ID (immer vorhanden)
+    if ('' === $titleField) {
+        $titleField = 'id';
     }
 }
 
@@ -153,22 +186,23 @@ echo '
          data-yform-accordion-title-field="' . rex_escape($titleField) . '"
          data-yform-accordion-status-field="' . rex_escape($statusField) . '">
         <label class="control-label" for="' . $this->getFieldId() . '">' . $this->getLabel() . '</label>
-        <div class="yform-accordion-toolbar">
-            <div class="yform-accordion-search">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon"><i class="rex-icon fa-search"></i></span>
-                    <input type="text" class="form-control" data-yform-accordion-search="' . $fieldkey . '" placeholder="' . rex_escape(rex_i18n::msg('yform_accordion_relation_search')) . '" autocomplete="off" />
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" data-yform-accordion-search-clear="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_search_clear')) . '" style="display:none"><i class="rex-icon fa-times"></i></button>
-                    </span>
+        <div>
+            <div class="yform-accordion-toolbar">
+                <div class="yform-accordion-search">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon"><i class="rex-icon fa-search"></i></span>
+                        <input type="text" class="form-control" data-yform-accordion-search="' . $fieldkey . '" placeholder="' . rex_escape(rex_i18n::msg('yform_accordion_relation_search')) . '" autocomplete="off" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" data-yform-accordion-search-clear="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_search_clear')) . '" style="display:none"><i class="rex-icon fa-times"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="yform-accordion-toolbar-actions btn-group btn-group-xs">
+                    <button type="button" class="btn btn-default" data-yform-accordion-expand-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_expand_all')) . '"><i class="rex-icon fa-server"></i></button>
+                    <button type="button" class="btn btn-default" data-yform-accordion-collapse-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_collapse_all')) . '"><i class="rex-icon fa-bars"></i></button>
                 </div>
             </div>
-            <div class="yform-accordion-toolbar-actions">
-                <button type="button" class="btn btn-xs btn-default" data-yform-accordion-expand-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_expand_all')) . '"><i class="rex-icon fa-angle-double-down"></i></button>
-                <button type="button" class="btn btn-xs btn-default" data-yform-accordion-collapse-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_collapse_all')) . '"><i class="rex-icon fa-angle-double-up"></i></button>
-            </div>
-        </div>
-        <div data-yform-accordion-items="' . $fieldkey . '" ' . $sortable . ' class="yform-accordion-wrapper panel-group">';
+            <div data-yform-accordion-items="' . $fieldkey . '" ' . $sortable . ' class="yform-accordion-wrapper panel-group">';
 
 $counter = 1;
 foreach ($forms as $form) {
@@ -198,10 +232,11 @@ foreach ($forms as $form) {
 }
 
 echo '
-        </div>
-        <div class="yform-accordion-add-wrapper">
-            <button type="button" class="btn btn-default yform-accordion-add-btn" data-yform-accordion-add="' . $fieldkey . '-' . $counter . '"><i class="rex-icon rex-icon-add-module"></i> ' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '</button>
-            <span data-yform-accordion-count class="yform-accordion-counter"><small>' . count($forms) . ' ' . rex_i18n::msg('yform_accordion_relation_count_label') . '</small></span>
+            </div>
+            <div class="yform-accordion-add-wrapper">
+                <button type="button" class="btn btn-default yform-accordion-add-btn" data-yform-accordion-add="' . $fieldkey . '-' . $counter . '"><i class="rex-icon rex-icon-add-module"></i> ' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '</button>
+                <span data-yform-accordion-count class="yform-accordion-counter"><small>' . count($forms) . ' ' . rex_i18n::msg('yform_accordion_relation_count_label') . '</small></span>
+            </div>
         </div>
         ' . $notice . '
     </div>';

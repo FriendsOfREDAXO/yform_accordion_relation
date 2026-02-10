@@ -336,8 +336,6 @@
 }
 
 .yform-accordion-toolbar-actions {
-    display: flex;
-    gap: 3px;
     margin-left: auto;
 }
 

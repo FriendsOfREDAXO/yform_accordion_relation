@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template-Override: value.be_manager_inline_relation_form.tpl.php
+ * Template-Override: value.be_manager_inline_relation_form.tpl.php.
  *
  * Rendert ein einzelnes Inline-Formular.
  * Wenn $accordion === true → Bootstrap Panel (Accordion-Item).
@@ -16,11 +16,11 @@ $counterfieldkey ??= '';
 $form ??= '';
 
 // Accordion-Parameter (optional, vom Wrapper-Template übergeben)
-$accordion = $accordion ?? false;
-$accordionTitle = $accordionTitle ?? '';
-$accordionIsNew = $accordionIsNew ?? false;
-$accordionIsOpen = $accordionIsOpen ?? false;
-$accordionTitleField = $accordionTitleField ?? '';
+$accordion ??= false;
+$accordionTitle ??= '';
+$accordionIsNew ??= false;
+$accordionIsOpen ??= false;
+$accordionTitleField ??= '';
 
 // -------------------------------------------------------------------
 // Kein Accordion? → Original-Verhalten 1:1
@@ -64,7 +64,7 @@ $inClass = $accordionIsOpen ? ' in' : '';
 $newClass = $accordionIsNew ? ' yform-accordion-item-new' : '';
 
 /**
- * Toolsbar für das Item zusammenstellen
+ * Toolsbar für das Item zusammenstellen.
  */
 // Status-Toggle
 $toolbarButton = [
@@ -86,7 +86,7 @@ $toolbarButton[] = '<button type="button" class="btn btn-xs btn-danger" data-yfo
 // Custom
 $toolbarButton = rex_extension::registerPoint(
     new rex_extension_point(
-        'YFORM_ACCORDION_RELATION_ITEM_BUTTONS', 
+        'YFORM_ACCORDION_RELATION_ITEM_BUTTONS',
         $toolbarButton,
         [
             'field' => $this,
@@ -94,7 +94,7 @@ $toolbarButton = rex_extension::registerPoint(
             'form' => $form,
             'accordionIsNew' => $accordionIsNew,
         ],
-    )
+    ),
 );
 
 echo '<div class="panel panel-default yform-accordion-item' . $newClass . '" id="' . $counterfieldkey . '"
@@ -107,7 +107,7 @@ echo '<div class="panel panel-default yform-accordion-item' . $newClass . '" id=
                 <span class="yform-accordion-title-text">' . rex_escape($accordionTitle) . '</span>
             </a>
             <span class="yform-accordion-actions">
-                ' . implode('',$toolbarButton) . '
+                ' . implode('', $toolbarButton) . '
             </span>
         </h4>
     </div>

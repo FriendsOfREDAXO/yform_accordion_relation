@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template-Override: value.be_manager_inline_relation.tpl.php
+ * Template-Override: value.be_manager_inline_relation.tpl.php.
  *
  * Wenn in den Attributen "accordion": true gesetzt ist, wird die
  * Inline-Relation als Accordion dargestellt. Sonst: Original-Verhalten.
@@ -113,7 +113,7 @@ if ('' === $titleField) {
     // Versuche, ein geeignetes Feld automatisch zu ermitteln
     $targetTable = $this->getElement('table');
     $targetTableObj = rex_yform_manager_table::get($targetTable);
-    
+
     if ($targetTableObj) {
         // Liste von Typen, die sich nicht als Titel eignen (keine echten Eingabefelder oder reine UI)
         $invalidTypes = ['html', 'php', 'index', 'upload', 'action', 'validate'];
@@ -124,7 +124,9 @@ if ('' === $titleField) {
             $parts = explode(',', $targetFieldAttr);
             foreach ($parts as $part) {
                 $fName = trim($part);
-                if ('' === $fName) continue;
+                if ('' === $fName) {
+                    continue;
+                }
                 if ('id' === $fName) {
                     $titleField = 'id';
                     break;
@@ -166,7 +168,7 @@ $prototypeForm = $this->parse(
         'accordionIsNew' => true,
         'accordionIsOpen' => true,
         'accordionTitleField' => $titleField,
-    ]
+    ],
 );
 
 $sortable = 'data-yform-accordion-sortable';
@@ -183,15 +185,15 @@ $toolbarButton = [
 
 $toolbarButton = rex_extension::registerPoint(
     new rex_extension_point(
-        'YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS', 
+        'YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS',
         $toolbarButton,
-         [
+        [
             'field' => $this,
             'fieldkey' => $fieldkey,
             'relationKey' => $relationKey,
             'attributes' => $attributes,
         ],
-    )
+    ),
 );
 
 echo '
@@ -243,7 +245,7 @@ foreach ($forms as $form) {
             'accordionIsNew' => false,
             'accordionIsOpen' => $isOpen,
             'accordionTitleField' => $titleField,
-        ]
+        ],
     );
     ++$counter;
 }

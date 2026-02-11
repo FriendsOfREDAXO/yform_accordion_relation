@@ -21,31 +21,42 @@ Erweitert das bestehende YForm-Feld `be_manager_relation` (Typ 5 = Inline) um ei
 ## Erweiterbarkeit (Extension Points)
 
 Das Addon stellt zwei Extension Points zur Verfügung, um eigene Buttons/Inhalte in die Toolbar oder den Panel-Header zu injizieren:
+Da über `$ep->getSubject` alle Button in der Reihenfolge von links nach rechts
+als Array übermittelt werden, können neue Button gezielt an die Wunschposition geschoben werden. 
 
 ### `YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS`
 
-Fügt Buttons in die Toolbar (neben "Alle aufklappen") ein.
+Fügt Buttons in die Toolbar (neben "Alle aufklappen") ein. Im Beispiel wird der neue Button
+links eingefügt, also am Anfang des Arrays
 
 ```php
 rex_extension::register('YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS', function (rex_extension_point $ep) {
+    $buttons = $ep->getSubject();
     // $field = $ep->getParam('field'); // Das YForm Value Objekt
     // $fieldkey = $ep->getParam('fieldkey');
     // $relationKey = $ep->getParam('relationKey');
-    
-    return '<button type="button" class="btn btn-default" onclick="alert(\'Info\')"><i class="rex-icon fa-info"></i></button>';
+    array_unshift(
+        $buttons,
+        '<button type="button" class="btn btn-default" title="Info" onclick="alert(\'Info\')"><i class="rex-icon rex-icon-info"></i></button>',
+    );
+    return $buttons;
 });
 ```
 
 ### `YFORM_ACCORDION_RELATION_ITEM_BUTTONS`
 
-Fügt Buttons rechts in den Header eines jeden Accordion-Items (neben Löschen/Verschieben) ein.
+Fügt Buttons rechts in den Header eines jeden Accordion-Items (neben Löschen/Verschieben) ein. Im Beispiel wird der neue Button
+rechts eingefügt, also am Ende des Arrays
 
 ```php
 rex_extension::register('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', function (rex_extension_point $ep) {
+    $buttons = $ep->getSubject();
+    // $field = $ep->getParam('field'); // Das YForm Value Objekt
     // $counterfieldkey = $ep->getParam('counterfieldkey');
+    // $form = $ep->getParam('form')
     // $accordionIsNew = $ep->getParam('accordionIsNew');
-    
-    return '<button type="button" class="btn btn-xs btn-default"><i class="rex-icon fa-flag"></i></button>';
+    $buttons[] = '<button type="button" class="btn btn-default" title="Info" onclick="alert(\'Info\')"><i class="rex-icon rex-icon-info"></i></button>';
+    return $buttons;
 });
 ```
 

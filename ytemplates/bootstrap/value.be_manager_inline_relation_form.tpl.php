@@ -73,7 +73,7 @@ $toolbarButton = [
 
 // Sort-Elemente
 $sorthandle = '';
-if (true || '' !== $prioFieldName) {
+if ('' !== $prioFieldName) {
     $sorthandle = '<span class="yform-accordion-sorthandle"><i class="rex-icon fa-bars"></i></span>';
     $toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-moveup="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_move_up')) . '"><i class="rex-icon rex-icon-up"></i></button>';
     $toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-movedown="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_move_down')) . '"><i class="rex-icon rex-icon-down"></i></button>';

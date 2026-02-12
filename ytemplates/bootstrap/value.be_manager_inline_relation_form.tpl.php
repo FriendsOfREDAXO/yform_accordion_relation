@@ -64,7 +64,7 @@ $inClass = $accordionIsOpen ? ' in' : '';
 $newClass = $accordionIsNew ? ' yform-accordion-item-new' : '';
 
 /**
- * Toolsbar für das Item zusammenstellen.
+ * Toolbar für das Item zusammenstellen.
  */
 // Status-Toggle
 $toolbarButton = [

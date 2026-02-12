@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template-Override: value.be_manager_inline_relation_form.tpl.php
+ * Template-Override: value.be_manager_inline_relation_form.tpl.php.
  *
  * Rendert ein einzelnes Inline-Formular.
  * Wenn $accordion === true → Bootstrap Panel (Accordion-Item).
@@ -16,11 +16,11 @@ $counterfieldkey ??= '';
 $form ??= '';
 
 // Accordion-Parameter (optional, vom Wrapper-Template übergeben)
-$accordion = $accordion ?? false;
-$accordionTitle = $accordionTitle ?? '';
-$accordionIsNew = $accordionIsNew ?? false;
-$accordionIsOpen = $accordionIsOpen ?? false;
-$accordionTitleField = $accordionTitleField ?? '';
+$accordion ??= false;
+$accordionTitle ??= '';
+$accordionIsNew ??= false;
+$accordionIsOpen ??= false;
+$accordionTitleField ??= '';
 
 // -------------------------------------------------------------------
 // Kein Accordion? → Original-Verhalten 1:1
@@ -63,15 +63,39 @@ $collapsedClass = $accordionIsOpen ? '' : 'collapsed';
 $inClass = $accordionIsOpen ? ' in' : '';
 $newClass = $accordionIsNew ? ' yform-accordion-item-new' : '';
 
+/**
+ * Toolbar für das Item zusammenstellen.
+ */
+// Status-Toggle
+$toolbarButton = [
+    '<button type="button" class="btn btn-xs yform-accordion-status-toggle" data-yform-accordion-status-toggle="' . $counterfieldkey . '" data-status-val="" title="Status umschalten" style="display:none"><span class="yform-status-dot"></span></button>',
+];
+
 // Sort-Elemente
 $sorthandle = '';
-$sortButtons = '';
 if ('' !== $prioFieldName) {
     $sorthandle = '<span class="yform-accordion-sorthandle"><i class="rex-icon fa-bars"></i></span>';
-    $sortButtons = '
-        <button type="button" class="btn btn-xs btn-default" data-yform-accordion-moveup="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_move_up')) . '"><i class="rex-icon rex-icon-up"></i></button>
-        <button type="button" class="btn btn-xs btn-default" data-yform-accordion-movedown="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_move_down')) . '"><i class="rex-icon rex-icon-down"></i></button>';
+    $toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-moveup="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_move_up')) . '"><i class="rex-icon rex-icon-up"></i></button>';
+    $toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-movedown="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_move_down')) . '"><i class="rex-icon rex-icon-down"></i></button>';
 }
+
+// add und delete
+$toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-add="' . $counterfieldkey . '" data-yform-accordion-add-position="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '"><i class="rex-icon rex-icon-add-module"></i></button>';
+$toolbarButton[] = '<button type="button" class="btn btn-xs btn-danger" data-yform-accordion-delete="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_delete')) . '"><i class="rex-icon rex-icon-delete"></i></button>';
+
+// Custom
+$toolbarButton = rex_extension::registerPoint(
+    new rex_extension_point(
+        'YFORM_ACCORDION_RELATION_ITEM_BUTTONS',
+        $toolbarButton,
+        [
+            'field' => $this,
+            'counterfieldkey' => $counterfieldkey,
+            'form' => $form,
+            'accordionIsNew' => $accordionIsNew,
+        ],
+    ),
+);
 
 echo '<div class="panel panel-default yform-accordion-item' . $newClass . '" id="' . $counterfieldkey . '"
           data-yform-accordion-title-field="' . rex_escape($accordionTitleField) . '">
@@ -83,16 +107,7 @@ echo '<div class="panel panel-default yform-accordion-item' . $newClass . '" id=
                 <span class="yform-accordion-title-text">' . rex_escape($accordionTitle) . '</span>
             </a>
             <span class="yform-accordion-actions">
-                <button type="button" class="btn btn-xs yform-accordion-status-toggle" data-yform-accordion-status-toggle="' . $counterfieldkey . '" data-status-val="" title="Status umschalten" style="display:none"><span class="yform-status-dot"></span></button>
-                ' . $sortButtons . '
-                <button type="button" class="btn btn-xs btn-default" data-yform-accordion-add="' . $counterfieldkey . '" data-yform-accordion-add-position="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '"><i class="rex-icon rex-icon-add-module"></i></button>
-                <button type="button" class="btn btn-xs btn-danger" data-yform-accordion-delete="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_delete')) . '"><i class="rex-icon rex-icon-delete"></i></button>
-                ' . rex_extension::registerPoint(new rex_extension_point('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', '', [
-                    'field' => $this,
-                    'counterfieldkey' => $counterfieldkey,
-                    'form' => $form,
-                    'accordionIsNew' => $accordionIsNew,
-                ])) . '
+                ' . implode('', $toolbarButton) . '
             </span>
         </h4>
     </div>

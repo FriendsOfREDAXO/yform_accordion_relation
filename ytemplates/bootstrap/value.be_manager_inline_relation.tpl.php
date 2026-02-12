@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template-Override: value.be_manager_inline_relation.tpl.php
+ * Template-Override: value.be_manager_inline_relation.tpl.php.
  *
  * Wenn in den Attributen "accordion": true gesetzt ist, wird die
  * Inline-Relation als Accordion dargestellt. Sonst: Original-Verhalten.
@@ -113,7 +113,7 @@ if ('' === $titleField) {
     // Versuche, ein geeignetes Feld automatisch zu ermitteln
     $targetTable = $this->getElement('table');
     $targetTableObj = rex_yform_manager_table::get($targetTable);
-    
+
     if ($targetTableObj) {
         // Liste von Typen, die sich nicht als Titel eignen (keine echten Eingabefelder oder reine UI)
         $invalidTypes = ['html', 'php', 'index', 'upload', 'action', 'validate'];
@@ -124,7 +124,9 @@ if ('' === $titleField) {
             $parts = explode(',', $targetFieldAttr);
             foreach ($parts as $part) {
                 $fName = trim($part);
-                if ('' === $fName) continue;
+                if ('' === $fName) {
+                    continue;
+                }
                 if ('id' === $fName) {
                     $titleField = 'id';
                     break;
@@ -166,7 +168,7 @@ $prototypeForm = $this->parse(
         'accordionIsNew' => true,
         'accordionIsOpen' => true,
         'accordionTitleField' => $titleField,
-    ]
+    ],
 );
 
 $sortable = 'data-yform-accordion-sortable';
@@ -175,6 +177,24 @@ if ('' === $prioFieldName) {
 }
 
 $fieldkey = 'y' . sha1($fieldkey . '-' . rex_escape($relationKey));
+
+$toolbarButton = [
+    '<button type="button" class="btn btn-default" data-yform-accordion-expand-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_expand_all')) . '"><i class="rex-icon fa-server"></i></button>',
+    '<button type="button" class="btn btn-default" data-yform-accordion-collapse-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_collapse_all')) . '"><i class="rex-icon fa-bars"></i></button>',
+];
+
+$toolbarButton = rex_extension::registerPoint(
+    new rex_extension_point(
+        'YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS',
+        $toolbarButton,
+        [
+            'field' => $this,
+            'fieldkey' => $fieldkey,
+            'relationKey' => $relationKey,
+            'attributes' => $attributes,
+        ],
+    ),
+);
 
 echo '
     <div class="' . $class_group . ' yform-accordion-relation"
@@ -198,14 +218,7 @@ echo '
                     </div>
                 </div>
                 <div class="yform-accordion-toolbar-actions btn-group btn-group-xs">
-                    <button type="button" class="btn btn-default" data-yform-accordion-expand-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_expand_all')) . '"><i class="rex-icon fa-server"></i></button>
-                    <button type="button" class="btn btn-default" data-yform-accordion-collapse-all="' . $fieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_collapse_all')) . '"><i class="rex-icon fa-bars"></i></button>
-                    ' . rex_extension::registerPoint(new rex_extension_point('YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS', '', [
-                        'field' => $this,
-                        'fieldkey' => $fieldkey,
-                        'relationKey' => $relationKey,
-                        'attributes' => $attributes,
-                    ])) . '
+                    ' . implode('', $toolbarButton) . '
                 </div>
             </div>
             <div data-yform-accordion-items="' . $fieldkey . '" ' . $sortable . ' class="yform-accordion-wrapper panel-group">';
@@ -232,7 +245,7 @@ foreach ($forms as $form) {
             'accordionIsNew' => false,
             'accordionIsOpen' => $isOpen,
             'accordionTitleField' => $titleField,
-        ]
+        ],
     );
     ++$counter;
 }

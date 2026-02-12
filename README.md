@@ -21,7 +21,7 @@ Erweitert das bestehende YForm-Feld `be_manager_relation` (Typ 5 = Inline) um ei
 ## Erweiterbarkeit (Extension Points)
 
 Das Addon stellt zwei Extension Points zur Verfügung, um eigene Buttons/Inhalte in die Toolbar oder den Panel-Header zu injizieren:
-Da über `$ep->getSubject` alle Button in der Reihenfolge von links nach rechts
+Da über `$ep->getSubject()` alle Button in der Reihenfolge von links nach rechts
 als Array übermittelt werden, können neue Button gezielt an die Wunschposition geschoben werden. 
 
 ### `YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS`

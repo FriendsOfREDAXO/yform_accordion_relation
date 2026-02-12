@@ -53,7 +53,7 @@ rex_extension::register('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', function (rex_e
     $buttons = $ep->getSubject();
     // $field = $ep->getParam('field'); // Das YForm Value Objekt
     // $counterfieldkey = $ep->getParam('counterfieldkey');
-    // $form = $ep->getParam('form')
+    // $form = $ep->getParam('form');
     // $accordionIsNew = $ep->getParam('accordionIsNew');
     $buttons[] = '<button type="button" class="btn btn-default" title="Info" onclick="alert(\'Info\')"><i class="rex-icon rex-icon-info"></i></button>';
     return $buttons;

@@ -10,55 +10,14 @@ Erweitert das bestehende YForm-Feld `be_manager_relation` (Typ 5 = Inline) um ei
 - **Live-Suche** – filtert Einträge in Echtzeit nach Titel und Formularinhalten
 - **Drag & Drop** – Einträge per Sortier-Handle verschieben (wenn Prio-Feld konfiguriert)
 - **Alle auf-/zuklappen** – Buttons in der Toolbar oder Doppelklick auf das Label
+- **Status-Toggle** – Status direkt im Panel-Header per Klick umschalten
 - **Löschen mit Bestätigung** – nativer Browser-Dialog vor dem Entfernen eines Eintrags
-- **Status-Farben** – farbige Markierung am linken Rand je nach Status-Feld (rot/grün/grau)
+- **Status-Farben** – farbige Markierung am linken Rand je nach Status-Feld
 - **Leer-Zustand** – zeigt einen Platzhalter wenn keine Einträge vorhanden sind
-- **„Neu"-Markierung** – neue Einträge werden mit grünem Rahmen und Badge hervorgehoben
+- **„Neu"-Markierung** – neue Einträge werden mit farbigem Rahmen und Badge hervorgehoben
 - **Fehler-Auto-Open** – Panels mit Validierungsfehlern werden automatisch geöffnet
 - **Dark-Mode-kompatibel** – funktioniert mit dem REDAXO Dark Theme
 - **100 % kompatibel** – kein eigenes Value, kein neuer Feldtyp, alle YForm-Core-Funktionen bleiben erhalten
-
-## Erweiterbarkeit (Extension Points)
-
-Das Addon stellt zwei Extension Points zur Verfügung, um eigene Buttons/Inhalte in die Toolbar oder den Panel-Header zu injizieren:
-Da über `$ep->getSubject()` alle Button in der Reihenfolge von links nach rechts
-als Array übermittelt werden, können neue Button gezielt an die Wunschposition geschoben werden. 
-
-### `YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS`
-
-Fügt Buttons in die Toolbar (neben "Alle aufklappen") ein. Im Beispiel wird der neue Button
-links eingefügt, also am Anfang des Arrays
-
-```php
-rex_extension::register('YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS', function (rex_extension_point $ep) {
-    $buttons = $ep->getSubject();
-    // $field = $ep->getParam('field'); // Das YForm Value Objekt
-    // $fieldkey = $ep->getParam('fieldkey');
-    // $relationKey = $ep->getParam('relationKey');
-    array_unshift(
-        $buttons,
-        '<button type="button" class="btn btn-default" title="Info" onclick="alert(\'Info\')"><i class="rex-icon rex-icon-info"></i></button>',
-    );
-    return $buttons;
-});
-```
-
-### `YFORM_ACCORDION_RELATION_ITEM_BUTTONS`
-
-Fügt Buttons rechts in den Header eines jeden Accordion-Items (neben Löschen/Verschieben) ein. Im Beispiel wird der neue Button
-rechts eingefügt, also am Ende des Arrays
-
-```php
-rex_extension::register('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', function (rex_extension_point $ep) {
-    $buttons = $ep->getSubject();
-    // $field = $ep->getParam('field'); // Das YForm Value Objekt
-    // $counterfieldkey = $ep->getParam('counterfieldkey');
-    // $form = $ep->getParam('form');
-    // $accordionIsNew = $ep->getParam('accordionIsNew');
-    $buttons[] = '<button type="button" class="btn btn-default" title="Info" onclick="alert(\'Info\')"><i class="rex-icon rex-icon-info"></i></button>';
-    return $buttons;
-});
-```
 
 ## Voraussetzungen
 
@@ -71,7 +30,7 @@ rex_extension::register('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', function (rex_e
 1. Im REDAXO-Installer nach **yform_accordion_relation** suchen und installieren
 2. Oder manuell nach `redaxo/src/addons/yform_accordion_relation` kopieren und im Backend aktivieren
 
-## Verwendung
+## Konfiguration
 
 Am bestehenden `be_manager_relation`-Feld (Typ **5 – Inline**) im Feld **Attribute** einfach aktivieren:
 
@@ -132,9 +91,9 @@ Alle Optionen werden als JSON im Attribute-Feld konfiguriert:
 
 | Wert | Farbe | Bedeutung |
 |------|-------|-----------|
-| `0` | Rot | Inaktiv / Offline |
-| `1` | Grün | Aktiv / Online |
-| `2` | Grau | Entwurf / Archiviert |
+| `0` | Rot (Ring) | Inaktiv / Offline |
+| `1` | Grün (gefüllt) | Aktiv / Online |
+| `2` | Grau (gefüllt) | Entwurf / Archiviert |
 
 **Alle Optionen kombiniert:**
 ```json
@@ -147,7 +106,15 @@ Alle Optionen werden als JSON im Attribute-Feld konfiguriert:
 }
 ```
 
-## Funktionsweise
+## Deinstallation
+
+Nach dem Deinstallieren verhalten sich alle Inline-Relationen wieder wie gewohnt. Die JSON-Attribute in den Feldern können bestehen bleiben – ohne das AddOn werden sie einfach ignoriert.
+
+---
+
+## Für Entwickler
+
+### Funktionsweise
 
 Das AddOn liefert **keine eigene Value-Klasse** und keinen neuen Feldtyp. Es überschreibt die drei Inline-Relation-Templates per `rex_yform::addTemplatePath()`:
 
@@ -171,9 +138,60 @@ Das AddOn ist vollständig kompatibel mit **yform_usability**. Beide nutzen unte
 | Selektor | `.sortable-list` (Tabellenzeilen) | `[data-yform-accordion-sortable]` (Panels) |
 | Ziel | Tabellen-Listenansicht | Inline-Relation-Formulare |
 
-## Deinstallation
+### Extension Points
 
-Nach dem Deinstallieren verhalten sich alle Inline-Relationen wieder wie gewohnt. Die JSON-Attribute in den Feldern können bestehen bleiben – ohne das AddOn werden sie einfach ignoriert.
+Das AddOn stellt zwei Extension Points zur Verfügung, um eigene Buttons/Inhalte in die Toolbar oder den Panel-Header einzufügen. Über `$ep->getSubject()` werden alle Buttons als Array (links → rechts) übermittelt, sodass neue Buttons gezielt positioniert werden können.
+
+#### `YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS`
+
+Fügt Buttons in die Toolbar (neben „Alle aufklappen") ein.
+
+```php
+rex_extension::register('YFORM_ACCORDION_RELATION_TOOLBAR_BUTTONS', function (rex_extension_point $ep) {
+    $buttons = $ep->getSubject();
+    // $field = $ep->getParam('field');           // Das YForm Value Objekt
+    // $fieldkey = $ep->getParam('fieldkey');
+    // $relationKey = $ep->getParam('relationKey');
+
+    // Button links einfügen (am Anfang)
+    array_unshift(
+        $buttons,
+        '<button type="button" class="btn btn-default" title="Info"><i class="rex-icon rex-icon-info"></i></button>',
+    );
+    return $buttons;
+});
+```
+
+#### `YFORM_ACCORDION_RELATION_ITEM_BUTTONS`
+
+Fügt Buttons in den Header eines jeden Accordion-Items ein (neben Löschen/Verschieben).
+
+```php
+rex_extension::register('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', function (rex_extension_point $ep) {
+    $buttons = $ep->getSubject();
+    // $field = $ep->getParam('field');                 // Das YForm Value Objekt
+    // $counterfieldkey = $ep->getParam('counterfieldkey');
+    // $form = $ep->getParam('form');
+    // $accordionIsNew = $ep->getParam('accordionIsNew');
+
+    // Button rechts anfügen (am Ende)
+    $buttons[] = '<button type="button" class="btn btn-default" title="Info"><i class="rex-icon rex-icon-info"></i></button>';
+    return $buttons;
+});
+```
+
+### Farbschema
+
+Die Status-Farben orientieren sich am REDAXO BE-Farbschema:
+
+| Status | CSS-Farbe | BE-Variable |
+|--------|-----------|-------------|
+| Offline (0) | `#d9534f` | `$color-offline` |
+| Online (1) | `#12b55e` | `$color-online` |
+| Entwurf (2) | `#324050` | `$color-a-dark` |
+| Neu-Badge | `#5bb585` | `$color-d` |
+
+---
 
 ## Lizenz
 

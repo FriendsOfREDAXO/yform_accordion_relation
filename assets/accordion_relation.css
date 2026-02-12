@@ -251,13 +251,13 @@
    ========================================================================== */
 
 .yform-accordion-item-new {
-    border-color: #5cb85c;
-    box-shadow: 0 0 8px rgba(92, 184, 92, 0.35);
+    border-color: #5bb585;
+    box-shadow: 0 0 8px rgba(91, 181, 133, 0.35);
 }
 
 .yform-accordion-item-new > .panel-heading {
-    background-color: #f0faf0;
-    border-bottom-color: #5cb85c;
+    background-color: #f0faf5;
+    border-bottom-color: #5bb585;
 }
 
 .yform-accordion-item-new .yform-accordion-title-text::after {
@@ -269,7 +269,7 @@
     font-weight: 600;
     line-height: 16px;
     color: #fff;
-    background-color: #5cb85c;
+    background-color: #5bb585;
     border-radius: 3px;
     vertical-align: middle;
     text-transform: uppercase;
@@ -370,11 +370,11 @@
 }
 
 .yform-accordion-status-1 {
-    border-left-color: #3c763d !important;
+    border-left-color: #12b55e !important;
 }
 
 .yform-accordion-status-2 {
-    border-left-color: #555 !important;
+    border-left-color: #324050 !important;
 }
 
 /* ==========================================================================
@@ -436,13 +436,13 @@
 
 /* Status 1 = Online: gefüllt grün */
 .yform-accordion-status-toggle[data-status-val="1"] .yform-status-dot {
-    background-color: #3c763d;
+    background-color: #12b55e;
     border: none;
 }
 
-/* Status 2 = Entwurf: gefüllt grau */
+/* Status 2 = Entwurf: gefüllt dunkel */
 .yform-accordion-status-toggle[data-status-val="2"] .yform-status-dot {
-    background-color: #999;
+    background-color: #324050;
     border: none;
 }
 

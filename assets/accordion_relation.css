@@ -4,7 +4,13 @@
  * Styling für Inline-Relationen als Accordion-Panels.
  * Nutzt Bootstrap 3 Panel-Klassen, ergänzt um eigene Klassen.
  */
+:root {
 
+    --status-online: #12b55e;     /* $color-online */
+    --status-offline: #d9534f;    /* $color-offline */
+    --status-wip: #3c763d;        /* $color-a-dark */
+    --danger: #d9534f;            /* $brand-danger */
+}
 /* ==========================================================================
    Wrapper
    ========================================================================== */
@@ -251,29 +257,19 @@
    ========================================================================== */
 
 .yform-accordion-item-new {
-    border-color: #5bb585;
-    box-shadow: 0 0 8px rgba(91, 181, 133, 0.35);
+    border-color: #5cb85c;
+    box-shadow: 0 0 8px rgba(92, 184, 92, 0.35);
 }
 
 .yform-accordion-item-new > .panel-heading {
-    background-color: #f0faf5;
-    border-bottom-color: #5bb585;
+    background-color: #f0faf0;
+    border-bottom-color: #5cb85c;
 }
 
-.yform-accordion-item-new .yform-accordion-title-text::after {
-    content: 'Neu';
-    display: inline-block;
-    margin-left: 8px;
-    padding: 1px 7px;
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 16px;
-    color: #fff;
-    background-color: #5bb585;
-    border-radius: 3px;
-    vertical-align: middle;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.yform-accordion-item-new .badge-success {
+    background-color: #5cb85c !important;
+    color: white !important;
+    border-radius: 4px;
 }
 
 /* ==========================================================================
@@ -366,15 +362,15 @@
 }
 
 .yform-accordion-status-0 {
-    border-left-color: #d9534f !important;
+    border-left-color: var(--status-offline) !important;
 }
 
 .yform-accordion-status-1 {
-    border-left-color: #12b55e !important;
+    border-left-color: var(--status-online) !important;
 }
 
 .yform-accordion-status-2 {
-    border-left-color: #324050 !important;
+    border-left-color: var(--status-wip) !important;
 }
 
 /* ==========================================================================
@@ -431,18 +427,18 @@
 /* Status 0 = Offline: roter Ring, nicht gefüllt */
 .yform-accordion-status-toggle[data-status-val="0"] .yform-status-dot {
     background-color: transparent;
-    border: 2px solid #d9534f;
+    border: 2px solid var(--status-offline);
 }
 
 /* Status 1 = Online: gefüllt grün */
 .yform-accordion-status-toggle[data-status-val="1"] .yform-status-dot {
-    background-color: #12b55e;
+    background-color: var(--status-online);
     border: none;
 }
 
-/* Status 2 = Entwurf: gefüllt dunkel */
+/* Status 2 = Entwurf: gefüllt grau */
 .yform-accordion-status-toggle[data-status-val="2"] .yform-status-dot {
-    background-color: #324050;
+    background-color: #999;
     border: none;
 }
 

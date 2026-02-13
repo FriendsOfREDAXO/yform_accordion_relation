@@ -104,7 +104,7 @@ echo '<div class="panel panel-default yform-accordion-item' . $newClass . '" id=
             ' . $sorthandle . '
             <a class="yform-accordion-toggle ' . $collapsedClass . '" role="button" data-toggle="collapse" href="#' . $collapseId . '">
                 <span class="yform-accordion-caret"><i class="rex-icon fa-caret-right"></i></span>
-                <span class="yform-accordion-title-text">' . rex_escape($accordionTitle) . '</span>
+                <span class="yform-accordion-title-text">' . rex_escape($accordionTitle) . '</span><span class="badge badge-success">' . rex_i18n::msg('yform_accordion_relation_new_entry_badge') . '</span>
             </a>
             <span class="yform-accordion-actions">
                 ' . implode('', $toolbarButton) . '

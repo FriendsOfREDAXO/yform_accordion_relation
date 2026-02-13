@@ -1,6 +1,7 @@
 yform_accordion_relation_title = Accordion Relation
 yform_accordion_relation_description = Inline relation (1-n) displayed as accordion
 yform_accordion_relation_new_entry = New entry
+yform_accordion_relation_new_entry_badge = New
 yform_accordion_relation_add = Add
 yform_accordion_relation_duplicate = Duplicate
 yform_accordion_relation_copy_suffix = Copy

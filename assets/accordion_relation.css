@@ -260,20 +260,10 @@
     border-bottom-color: #5bb585;
 }
 
-.yform-accordion-item-new .yform-accordion-title-text::after {
-    content: 'Neu';
-    display: inline-block;
-    margin-left: 8px;
-    padding: 1px 7px;
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 16px;
-    color: #fff;
-    background-color: #5bb585;
-    border-radius: 3px;
-    vertical-align: middle;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.yform-accordion-item-new .badge-success {
+    background-color: #5cb85c !important;
+    color: white !important;
+    border-radius: 4px;
 }
 
 /* ==========================================================================

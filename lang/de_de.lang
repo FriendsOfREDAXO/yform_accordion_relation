@@ -1,6 +1,7 @@
 yform_accordion_relation_title = Accordion Relation
 yform_accordion_relation_description = Inline-Relation (1-n) als Accordion dargestellt
 yform_accordion_relation_new_entry = Neuer Eintrag
+yform_accordion_relation_new_entry_badge = Neu
 yform_accordion_relation_add = Hinzufügen
 yform_accordion_relation_delete = Löschen
 yform_accordion_relation_move_up = Nach oben

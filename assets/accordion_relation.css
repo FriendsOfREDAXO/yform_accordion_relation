@@ -4,13 +4,7 @@
  * Styling für Inline-Relationen als Accordion-Panels.
  * Nutzt Bootstrap 3 Panel-Klassen, ergänzt um eigene Klassen.
  */
-:root {
 
-    --status-online: #12b55e;     /* $color-online */
-    --status-offline: #d9534f;    /* $color-offline */
-    --status-wip: #3c763d;        /* $color-a-dark */
-    --danger: #d9534f;            /* $brand-danger */
-}
 /* ==========================================================================
    Wrapper
    ========================================================================== */
@@ -257,13 +251,13 @@
    ========================================================================== */
 
 .yform-accordion-item-new {
-    border-color: #5cb85c;
-    box-shadow: 0 0 8px rgba(92, 184, 92, 0.35);
+    border-color: #5bb585;
+    box-shadow: 0 0 8px rgba(91, 181, 133, 0.35);
 }
 
 .yform-accordion-item-new > .panel-heading {
-    background-color: #f0faf0;
-    border-bottom-color: #5cb85c;
+    background-color: #f0faf5;
+    border-bottom-color: #5bb585;
 }
 
 .yform-accordion-item-new .badge-success {
@@ -362,15 +356,15 @@
 }
 
 .yform-accordion-status-0 {
-    border-left-color: var(--status-offline) !important;
+    border-left-color: #d9534f !important;
 }
 
 .yform-accordion-status-1 {
-    border-left-color: var(--status-online) !important;
+    border-left-color: #12b55e !important;
 }
 
 .yform-accordion-status-2 {
-    border-left-color: var(--status-wip) !important;
+    border-left-color: #324050 !important;
 }
 
 /* ==========================================================================
@@ -427,18 +421,18 @@
 /* Status 0 = Offline: roter Ring, nicht gefüllt */
 .yform-accordion-status-toggle[data-status-val="0"] .yform-status-dot {
     background-color: transparent;
-    border: 2px solid var(--status-offline);
+    border: 2px solid #d9534f;
 }
 
 /* Status 1 = Online: gefüllt grün */
 .yform-accordion-status-toggle[data-status-val="1"] .yform-status-dot {
-    background-color: var(--status-online);
+    background-color: #12b55e;
     border: none;
 }
 
-/* Status 2 = Entwurf: gefüllt grau */
+/* Status 2 = Entwurf: gefüllt dunkel */
 .yform-accordion-status-toggle[data-status-val="2"] .yform-status-dot {
-    background-color: #999;
+    background-color: #324050;
     border: none;
 }
 

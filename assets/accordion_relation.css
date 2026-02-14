@@ -453,3 +453,115 @@
     border-left: 3px solid #ddd;
     padding-left: 10px;
 }
+
+/* ==========================================================================
+   Dark Mode
+   ========================================================================== */
+
+/* --- Explicit Dark Mode --- */
+body.rex-theme-dark .yform-accordion-item > .panel-heading:hover {
+    background-color: #2a2a2a;
+}
+
+body.rex-theme-dark .yform-accordion-item-new > .panel-heading {
+    background-color: rgba(18, 181, 94, 0.1);
+}
+
+body.rex-theme-dark .yform-accordion-badge-new {
+    background-color: #12b55e;
+    color: #fff;
+}
+
+body.rex-theme-dark .yform-accordion-sortable-placeholder {
+    background-color: rgba(91, 192, 222, 0.1);
+    border-color: rgba(91, 192, 222, 0.4);
+}
+
+body.rex-theme-dark .yform-accordion-relation-view .yform-accordion-body {
+    background-color: #1e1e1e;
+}
+
+body.rex-theme-dark .yform-accordion-search .input-group-addon {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #888;
+}
+
+body.rex-theme-dark .yform-accordion-search input.form-control {
+    border-color: #444;
+}
+
+body.rex-theme-dark .yform-accordion-search-match > .panel-heading {
+    background-color: rgba(252, 248, 227, 0.08);
+}
+
+body.rex-theme-dark .yform-accordion-no-results {
+    border-color: #444;
+}
+
+body.rex-theme-dark .yform-accordion-empty {
+    border-color: #444;
+}
+
+body.rex-theme-dark .yform-accordion-status-toggle:hover .yform-status-dot {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+}
+
+body.rex-theme-dark .yform-accordion-body .yform-accordion-relation {
+    border-left-color: #444;
+}
+
+/* --- Auto Dark Mode --- */
+@media (prefers-color-scheme: dark) {
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item > .panel-heading:hover {
+        background-color: #2a2a2a;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item-new > .panel-heading {
+        background-color: rgba(18, 181, 94, 0.1);
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-badge-new {
+        background-color: #12b55e;
+        color: #fff;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-sortable-placeholder {
+        background-color: rgba(91, 192, 222, 0.1);
+        border-color: rgba(91, 192, 222, 0.4);
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-relation-view .yform-accordion-body {
+        background-color: #1e1e1e;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-search .input-group-addon {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: #888;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-search input.form-control {
+        border-color: #444;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-search-match > .panel-heading {
+        background-color: rgba(252, 248, 227, 0.08);
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-no-results {
+        border-color: #444;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-empty {
+        border-color: #444;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-status-toggle:hover .yform-status-dot {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-body .yform-accordion-relation {
+        border-left-color: #444;
+    }
+}

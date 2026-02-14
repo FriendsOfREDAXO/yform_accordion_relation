@@ -260,14 +260,8 @@
     border-bottom-color: #5bb585;
 }
 
-/* Badge standardmäßig versteckt, nur bei neuen Items sichtbar */
-.yform-accordion-item .badge-success {
-    display: none;
-}
-
 .yform-accordion-item-new .badge-success {
-    display: inline-block;
-    background-color: #5bb585;
+    background-color: #12b55e;
     color: white;
     border-radius: 4px;
     margin-left: 6px;

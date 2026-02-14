@@ -463,8 +463,14 @@ body.rex-theme-dark .yform-accordion-item > .panel-heading:hover {
     background-color: #1e1e1e;
 }
 
+body.rex-theme-dark .yform-accordion-item-new {
+    border-color: rgba(18, 181, 94, 0.3);
+    box-shadow: 0 0 6px rgba(18, 181, 94, 0.15);
+}
+
 body.rex-theme-dark .yform-accordion-item-new > .panel-heading {
     background-color: rgba(18, 181, 94, 0.07);
+    border-bottom-color: rgba(18, 181, 94, 0.3);
 }
 
 body.rex-theme-dark .yform-accordion-badge-new {
@@ -517,8 +523,14 @@ body.rex-theme-dark .yform-accordion-body .yform-accordion-relation {
         background-color: #1e1e1e;
     }
 
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item-new {
+        border-color: rgba(18, 181, 94, 0.3);
+        box-shadow: 0 0 6px rgba(18, 181, 94, 0.15);
+    }
+
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item-new > .panel-heading {
         background-color: rgba(18, 181, 94, 0.07);
+        border-bottom-color: rgba(18, 181, 94, 0.3);
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-badge-new {

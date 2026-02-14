@@ -460,11 +460,11 @@
 
 /* --- Explicit Dark Mode --- */
 body.rex-theme-dark .yform-accordion-item > .panel-heading:hover {
-    background-color: #2a2a2a;
+    background-color: #1e1e1e;
 }
 
 body.rex-theme-dark .yform-accordion-item-new > .panel-heading {
-    background-color: rgba(18, 181, 94, 0.1);
+    background-color: rgba(18, 181, 94, 0.07);
 }
 
 body.rex-theme-dark .yform-accordion-badge-new {
@@ -473,52 +473,52 @@ body.rex-theme-dark .yform-accordion-badge-new {
 }
 
 body.rex-theme-dark .yform-accordion-sortable-placeholder {
-    background-color: rgba(91, 192, 222, 0.1);
-    border-color: rgba(91, 192, 222, 0.4);
+    background-color: rgba(91, 192, 222, 0.06);
+    border-color: rgba(91, 192, 222, 0.25);
 }
 
 body.rex-theme-dark .yform-accordion-relation-view .yform-accordion-body {
-    background-color: #1e1e1e;
+    background-color: #141414;
 }
 
 body.rex-theme-dark .yform-accordion-search .input-group-addon {
-    background-color: #2a2a2a;
-    border-color: #444;
-    color: #888;
+    background-color: #1a1a1a;
+    border-color: #333;
+    color: #666;
 }
 
 body.rex-theme-dark .yform-accordion-search input.form-control {
-    border-color: #444;
+    border-color: #333;
 }
 
 body.rex-theme-dark .yform-accordion-search-match > .panel-heading {
-    background-color: rgba(252, 248, 227, 0.08);
+    background-color: rgba(252, 248, 227, 0.04);
 }
 
 body.rex-theme-dark .yform-accordion-no-results {
-    border-color: #444;
+    border-color: #333;
 }
 
 body.rex-theme-dark .yform-accordion-empty {
-    border-color: #444;
+    border-color: #333;
 }
 
 body.rex-theme-dark .yform-accordion-status-toggle:hover .yform-status-dot {
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
 }
 
 body.rex-theme-dark .yform-accordion-body .yform-accordion-relation {
-    border-left-color: #444;
+    border-left-color: #333;
 }
 
 /* --- Auto Dark Mode --- */
 @media (prefers-color-scheme: dark) {
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item > .panel-heading:hover {
-        background-color: #2a2a2a;
+        background-color: #1e1e1e;
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item-new > .panel-heading {
-        background-color: rgba(18, 181, 94, 0.1);
+        background-color: rgba(18, 181, 94, 0.07);
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-badge-new {
@@ -527,41 +527,41 @@ body.rex-theme-dark .yform-accordion-body .yform-accordion-relation {
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-sortable-placeholder {
-        background-color: rgba(91, 192, 222, 0.1);
-        border-color: rgba(91, 192, 222, 0.4);
+        background-color: rgba(91, 192, 222, 0.06);
+        border-color: rgba(91, 192, 222, 0.25);
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-relation-view .yform-accordion-body {
-        background-color: #1e1e1e;
+        background-color: #141414;
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-search .input-group-addon {
-        background-color: #2a2a2a;
-        border-color: #444;
-        color: #888;
+        background-color: #1a1a1a;
+        border-color: #333;
+        color: #666;
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-search input.form-control {
-        border-color: #444;
+        border-color: #333;
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-search-match > .panel-heading {
-        background-color: rgba(252, 248, 227, 0.08);
+        background-color: rgba(252, 248, 227, 0.04);
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-no-results {
-        border-color: #444;
+        border-color: #333;
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-empty {
-        border-color: #444;
+        border-color: #333;
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-status-toggle:hover .yform-status-dot {
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
     }
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-body .yform-accordion-relation {
-        border-left-color: #444;
+        border-left-color: #333;
     }
 }

@@ -12,25 +12,6 @@
 $(document).on('rex:ready', function (event, container) {
 
     // =========================================================================
-    // ACCORDION TOGGLE (Caret-Icon Rotation wird per CSS gemacht)
-    // =========================================================================
-
-    // Bootstrap collapse events nutzen für Caret
-    container.find('.yform-accordion-relation').each(function () {
-        var $wrapper = $(this);
-
-        $wrapper.on('show.bs.collapse', '.panel-collapse', function () {
-            var $heading = $(this).prev('.panel-heading');
-            $heading.find('.yform-accordion-toggle').removeClass('collapsed');
-        });
-
-        $wrapper.on('hide.bs.collapse', '.panel-collapse', function () {
-            var $heading = $(this).prev('.panel-heading');
-            $heading.find('.yform-accordion-toggle').addClass('collapsed');
-        });
-    });
-
-    // =========================================================================
     // LIVE TITLE UPDATE
     // =========================================================================
 

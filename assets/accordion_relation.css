@@ -260,15 +260,19 @@
     border-bottom-color: #5bb585;
 }
 
-.yform-accordion-item-new .badge-success {
+.yform-accordion-badge-new {
+    display: inline-block;
     background-color: #12b55e;
-    color: white;
+    color: #fff;
     border-radius: 4px;
     margin-left: 6px;
+    padding: 2px 6px;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    line-height: 1.4;
+    vertical-align: middle;
 }
 
 /* ==========================================================================

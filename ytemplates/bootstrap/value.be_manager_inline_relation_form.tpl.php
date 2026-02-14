@@ -97,7 +97,7 @@ $toolbarButton = rex_extension::registerPoint(
     ),
 );
 
-$newBadge = $accordionIsNew ? '<span class="badge badge-success">' . rex_i18n::msg('yform_accordion_relation_new_entry_badge') . '</span>' : '';
+$newBadge = $accordionIsNew ? '<span class="yform-accordion-badge-new">' . rex_i18n::msg('yform_accordion_relation_new_entry_badge') . '</span>' : '';
 
 echo '<div class="panel panel-default yform-accordion-item' . $newClass . '" id="' . $counterfieldkey . '"
           data-yform-accordion-title-field="' . rex_escape($accordionTitleField) . '">

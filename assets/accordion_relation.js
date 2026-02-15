@@ -283,7 +283,7 @@ $(document).on('rex:ready', function (event, container) {
         function syncToggleBtn() {
             var val = getCurrentVal();
             $toggleBtn.attr('data-status-val', val);
-            var label = valueLabels[val] || ('Status: ' + val);
+            var label = valueLabels[val] || val;
             $toggleBtn.attr('title', toggleTpl.replace('{0}', label));
         }
 
@@ -489,17 +489,28 @@ $(document).on('rex:ready', function (event, container) {
     // VALIDATION ERROR: Panels mit Fehlern auto-öffnen
     // =========================================================================
 
-    container.find('.yform-accordion-item').each(function () {
-        var $item = $(this);
-        var $body = $item.find('.yform-accordion-body');
+    container.find('.yform-accordion-relation').each(function () {
+        var $relation = $(this);
+        var errorMsg = $relation.attr('data-yform-accordion-i18n-error') || '';
 
-        // Prüfen ob im Panel Fehler-Markierungen vorhanden sind
-        if ($body.find('.has-error, .form-error, .text-warning, .alert-danger').length > 0) {
-            var $collapse = $item.find('.panel-collapse');
-            $collapse.addClass('in');
-            $item.find('.yform-accordion-toggle').removeClass('collapsed');
-            $item.addClass('yform-accordion-item-error');
-        }
+        $relation.find('.yform-accordion-item').each(function () {
+            var $item = $(this);
+            var $body = $item.find('.yform-accordion-body');
+
+            // Prüfen ob im Panel Fehler-Markierungen vorhanden sind
+            if ($body.find('.has-error, .form-error, .text-warning, .alert-danger').length > 0) {
+                var $collapse = $item.find('.panel-collapse');
+                $collapse.addClass('in');
+                $item.find('.yform-accordion-toggle').removeClass('collapsed');
+                $item.addClass('yform-accordion-item-error');
+
+                // Error-Badge im Header einfügen
+                if (errorMsg && !$item.find('.yform-accordion-error-badge').length) {
+                    var $titleText = $item.find('.yform-accordion-title-text').first();
+                    $titleText.after('<span class="yform-accordion-error-badge"><i class="rex-icon fa-exclamation-triangle"></i> ' + errorMsg + '</span>');
+                }
+            }
+        });
     });
 
     // =========================================================================
@@ -645,7 +656,7 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // Doppelklick auf Label: alle Panels toggle
-    container.find('.yform-accordion-relation .control-label').on('dblclick', function () {
+    container.find('.yform-accordion-relation > .control-label').on('dblclick', function () {
         var $wrapper = $(this).closest('.yform-accordion-relation');
         var $panels = $wrapper.find('.panel-collapse');
         var allOpen = $panels.filter('.in').length === $panels.length;
@@ -665,7 +676,7 @@ $(document).on('rex:ready', function (event, container) {
 
     container.find('.yform-accordion-relation').each(function () {
         var $relation = $(this);
-        var errorMsg = $relation.attr('data-yform-accordion-i18n-error') || 'Please check the input';
+        var errorMsg = $relation.attr('data-yform-accordion-i18n-error') || '';
 
         // invalid-Event auf allen Formularfeldern in Accordion-Items abfangen
         // (useCapture=true, weil 'invalid' nicht bubbelt)
@@ -676,17 +687,19 @@ $(document).on('rex:ready', function (event, container) {
 
             var $collapse = $item.find('.panel-collapse').first();
 
-            // Panel öffnen falls geschlossen
+            // Panel öffnen falls geschlossen – Bootstrap-Methode für korrektes Layout
             if (!$collapse.hasClass('in')) {
-                $collapse.addClass('in');
+                $collapse.removeClass('collapse').addClass('collapse in');
+                $collapse.css('height', '');
                 $item.find('.yform-accordion-toggle').removeClass('collapsed');
+                $collapse[0].offsetHeight; // Reflow erzwingen
             }
 
             // Error-Styling und Badge
             if (!$item.hasClass('yform-accordion-item-error')) {
                 $item.addClass('yform-accordion-item-error');
-                var $titleText = $item.find('.yform-accordion-title-text').first();
-                if (!$item.find('.yform-accordion-error-badge').length) {
+                if (errorMsg && !$item.find('.yform-accordion-error-badge').length) {
+                    var $titleText = $item.find('.yform-accordion-title-text').first();
                     $titleText.after('<span class="yform-accordion-error-badge"><i class="rex-icon fa-exclamation-triangle"></i> ' + errorMsg + '</span>');
                 }
             }

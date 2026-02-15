@@ -378,7 +378,20 @@
 
 /* ==========================================================================
    Empty State
+   Wenn der Wrapper leer ist (keine Sub-Formulare) wird die Toolbar ausgeblendet,
+   da sie bei leeren Wrapper sinnlos ist. Der Wrapper selbst ist dann per se
+   unsichtbar (Höhe 0px). Man muss über den Contaier gehen, da die Toolbar VOR
+   dem Wrapper steht.
+   Die Empty-Container ausgeblendet, wenn der Wrapper mind. ein Item enthält.
    ========================================================================== */
+
+.yform-accordion-container:not(:has( > .yform-accordion-wrapper > div )) > .yform-accordion-toolbar {
+    display: none;
+}
+
+.yform-accordion-wrapper:has(div) ~ .yform-accordion-empty {
+    display: none;
+}
 
 .yform-accordion-empty {
     padding: 30px 15px;

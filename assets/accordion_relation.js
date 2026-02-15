@@ -367,7 +367,6 @@ $(document).on('rex:ready', function (event, container) {
         $panel.slideUp(200, function () {
             $panel.remove();
             updateCounter($wrapper);
-            updateEmptyState($wrapper);
         });
     });
 
@@ -480,7 +479,6 @@ $(document).on('rex:ready', function (event, container) {
             // Counter + Empty State aktualisieren
             var $itemsWrapper = $wrapper.find('[data-yform-accordion-items]');
             updateCounter($itemsWrapper);
-            updateEmptyState($itemsWrapper);
 
             // Status-Farbe initialisieren
             initStatusColor($newItem.find('.yform-accordion-item').addBack('.yform-accordion-item'));
@@ -531,26 +529,6 @@ $(document).on('rex:ready', function (event, container) {
             $counter.find('small').text(count + ' Einträge');
         }
     }
-
-    // Empty State anzeigen/verstecken
-    function updateEmptyState($wrapper) {
-        var $relation = $wrapper.closest('.yform-accordion-relation');
-        var count = $wrapper.find('> .yform-accordion-item').length;
-        var $empty = $relation.find('.yform-accordion-empty');
-
-        if (count === 0) {
-            if (!$empty.length) {
-                $wrapper.after('<div class="yform-accordion-empty"><div class="text-center text-muted"><i class="rex-icon fa-inbox" style="font-size:32px;opacity:0.3"></i><p style="margin-top:8px">Keine Einträge vorhanden</p></div></div>');
-            }
-        } else {
-            $empty.remove();
-        }
-    }
-
-    // Initial: Empty State prüfen
-    container.find('[data-yform-accordion-items]').each(function () {
-        updateEmptyState($(this));
-    });
 
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

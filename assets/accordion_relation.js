@@ -669,11 +669,16 @@ $(document).on('rex:ready', function (event, container) {
 
         $form.data('accordion-submit-bound', true);
         $form.on('submit', function () {
-            // Alle zugeklappten Panels mit invaliden required-Feldern finden
+            var errorMsg = $relation.attr('data-yform-accordion-i18n-error') || 'Please check the input';
+
+            // Alle Panels mit invaliden required-Feldern finden
             $form.find('.yform-accordion-item').each(function () {
                 var $item = $(this);
                 var $collapse = $item.find('.panel-collapse').first();
-                if ($collapse.hasClass('in')) return; // Bereits offen
+
+                // Vorherige Fehler-Markierungen entfernen
+                $item.removeClass('yform-accordion-item-error');
+                $item.find('.yform-accordion-error-badge').remove();
 
                 // Prüfe ob invalide required-Felder existieren
                 var hasInvalid = false;
@@ -685,9 +690,18 @@ $(document).on('rex:ready', function (event, container) {
                 });
 
                 if (hasInvalid) {
-                    $collapse.addClass('in');
-                    $item.find('.yform-accordion-toggle').removeClass('collapsed');
+                    // Panel öffnen falls geschlossen
+                    if (!$collapse.hasClass('in')) {
+                        $collapse.addClass('in');
+                        $item.find('.yform-accordion-toggle').removeClass('collapsed');
+                    }
                     $item.addClass('yform-accordion-item-error');
+
+                    // Fehler-Badge im Header einfügen
+                    var $titleText = $item.find('.yform-accordion-title-text').first();
+                    if (!$item.find('.yform-accordion-error-badge').length) {
+                        $titleText.after('<span class="yform-accordion-error-badge"><i class="rex-icon fa-exclamation-triangle"></i> ' + errorMsg + '</span>');
+                    }
                 }
             });
         });

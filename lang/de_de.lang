@@ -18,4 +18,5 @@ yform_accordion_relation_entry_fallback = Eintrag
 yform_accordion_relation_confirm_delete = "{0}" wirklich löschen?
 yform_accordion_relation_no_results = Keine Treffer für "{0}"
 yform_accordion_relation_status_toggle = {0} – Klicken zum Umschalten
+yform_accordion_relation_validation_error = Bitte prüfen Sie die Eingaben
 yform_accordion_relation_info = Erweitert be_manager_relation (Typ 5 = Inline) um eine Accordion-Darstellung. Aktivierung per Attribut: {"accordion": true}. Kein eigenes Value – nur Template-Overrides.

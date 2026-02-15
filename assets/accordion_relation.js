@@ -656,4 +656,40 @@ $(document).on('rex:ready', function (event, container) {
             $panels.collapse('show');
         }
     });
+
+    // =========================================================================
+    // FORM SUBMIT: Panels mit invaliden required-Feldern öffnen
+    // Browser kann required-Felder in collapsed Panels nicht fokussieren.
+    // =========================================================================
+
+    container.find('.yform-accordion-relation').each(function () {
+        var $relation = $(this);
+        var $form = $relation.closest('form');
+        if (!$form.length || $form.data('accordion-submit-bound')) return;
+
+        $form.data('accordion-submit-bound', true);
+        $form.on('submit', function () {
+            // Alle zugeklappten Panels mit invaliden required-Feldern finden
+            $form.find('.yform-accordion-item').each(function () {
+                var $item = $(this);
+                var $collapse = $item.find('.panel-collapse').first();
+                if ($collapse.hasClass('in')) return; // Bereits offen
+
+                // Prüfe ob invalide required-Felder existieren
+                var hasInvalid = false;
+                $collapse.find('input, select, textarea').each(function () {
+                    if (this.required && !this.validity.valid) {
+                        hasInvalid = true;
+                        return false;
+                    }
+                });
+
+                if (hasInvalid) {
+                    $collapse.addClass('in');
+                    $item.find('.yform-accordion-toggle').removeClass('collapsed');
+                    $item.addClass('yform-accordion-item-error');
+                }
+            });
+        });
+    });
 });

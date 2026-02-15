@@ -16,7 +16,10 @@ Erweitert das bestehende YForm-Feld `be_manager_relation` (Typ 5 = Inline) um ei
 - **Leer-Zustand** – zeigt einen Platzhalter wenn keine Einträge vorhanden sind
 - **„Neu"-Markierung** – neue Einträge werden mit farbigem Rahmen und Badge hervorgehoben
 - **Fehler-Auto-Open** – Panels mit Validierungsfehlern werden automatisch geöffnet
-- **Dark-Mode-kompatibel** – funktioniert mit dem REDAXO Dark Theme
+- **Validierung in Collapsed Panels** – `required`-Felder in geschlossenen Panels werden erkannt, das Panel wird geöffnet und ein Fehler-Badge im Header angezeigt
+- **Fehler-Badge** – Panel-Header zeigt roten Badge „Bitte prüfen Sie die Eingaben" bei invaliden Feldern, verschwindet automatisch nach Korrektur
+- **Vollständige i18n** – alle Texte über Lang-Dateien, keine hardcodierten Strings
+- **Dark-Mode-kompatibel** – funktioniert mit dem REDAXO Dark Theme (explizit + auto)
 - **100 % kompatibel** – kein eigenes Value, kein neuer Feldtyp, alle YForm-Core-Funktionen bleiben erhalten
 
 ## Voraussetzungen
@@ -179,6 +182,18 @@ rex_extension::register('YFORM_ACCORDION_RELATION_ITEM_BUTTONS', function (rex_e
     return $buttons;
 });
 ```
+
+### Fehlerbehandlung
+
+Das AddOn behandelt Formular-Validierungsfehler auf zwei Ebenen:
+
+**Browser-Validierung (`required`-Felder):**
+Wenn ein `required`-Feld in einem geschlossenen Accordion-Panel liegt, kann der Browser es normalerweise nicht fokussieren und zeigt *„An invalid form control is not focusable"*. Das AddOn fängt das `invalid`-Event ab (mit `useCapture`, da es nicht bubbelt), öffnet das Panel rechtzeitig und zeigt einen roten Fehler-Badge im Panel-Header.
+
+**Server-Validierung (YForm `has-error`):**
+Nach dem Absenden prüft das AddOn auf `.has-error`, `.form-error`, `.text-warning` und `.alert-danger` innerhalb der Panels. Betroffene Panels werden automatisch geöffnet und mit dem Fehler-Badge markiert.
+
+Der Fehler-State (roter Rand, roter Header, Badge) wird automatisch zurückgesetzt, sobald alle Pflichtfelder im Panel korrekt ausgefüllt sind.
 
 ### Farbschema
 

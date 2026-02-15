@@ -14,4 +14,7 @@ yform_accordion_relation_expand_all = Alle aufklappen
 yform_accordion_relation_collapse_all = Alle zuklappen
 yform_accordion_relation_empty = Keine Einträge vorhanden
 yform_accordion_relation_delete_confirm = Klick = endgültig löschen
+yform_accordion_relation_entry_fallback = Eintrag
+yform_accordion_relation_confirm_delete = "{0}" wirklich löschen?
+yform_accordion_relation_no_results = Keine Treffer für "{0}"
 yform_accordion_relation_info = Erweitert be_manager_relation (Typ 5 = Inline) um eine Accordion-Darstellung. Aktivierung per Attribut: {"accordion": true}. Kein eigenes Value – nur Template-Overrides.

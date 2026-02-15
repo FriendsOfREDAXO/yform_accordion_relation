@@ -204,9 +204,13 @@ echo '
          data-yform-accordion-index="' . count($forms) . '"
          data-yform-accordion-new-label="' . rex_escape($newLabel) . '"
          data-yform-accordion-title-field="' . rex_escape($titleField) . '"
-         data-yform-accordion-status-field="' . rex_escape($statusField) . '">
+         data-yform-accordion-status-field="' . rex_escape($statusField) . '"
+         data-yform-accordion-i18n-entry="' . rex_escape(rex_i18n::msg('yform_accordion_relation_entry_fallback')) . '"
+         data-yform-accordion-i18n-confirm="' . rex_escape(rex_i18n::msg('yform_accordion_relation_confirm_delete')) . '"
+         data-yform-accordion-i18n-count="' . rex_escape(rex_i18n::msg('yform_accordion_relation_count_label')) . '"
+         data-yform-accordion-i18n-noresults="' . rex_escape(rex_i18n::msg('yform_accordion_relation_no_results')) . '">
         <label class="control-label" for="' . $this->getFieldId() . '">' . $this->getLabel() . '</label>
-        <div>
+        <div class="yform-accordion-container">
             <div class="yform-accordion-toolbar">
                 <div class="yform-accordion-search">
                     <div class="input-group input-group-sm">
@@ -251,6 +255,12 @@ foreach ($forms as $form) {
 }
 
 echo '
+            </div>
+            <div class="yform-accordion-empty">
+                <div class="text-center text-muted">
+                    <i class="rex-icon fa-inbox" style="font-size:32px;opacity:0.3"></i>
+                    <p style="margin-top:8px">' . rex_i18n::msg('yform_accordion_relation_empty') . '</p>
+                </div>
             </div>
             <div class="yform-accordion-add-wrapper">
                 <button type="button" class="btn btn-default yform-accordion-add-btn" data-yform-accordion-add="' . $fieldkey . '-' . $counter . '"><i class="rex-icon rex-icon-add-module"></i> ' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '</button>

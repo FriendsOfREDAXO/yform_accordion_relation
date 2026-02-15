@@ -658,52 +658,60 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // =========================================================================
-    // FORM SUBMIT: Panels mit invaliden required-Feldern öffnen
-    // Browser kann required-Felder in collapsed Panels nicht fokussieren.
+    // FORM VALIDATION: Panels mit invaliden required-Feldern öffnen
+    // Das 'invalid'-Event feuert VOR dem submit-Event und VOR der
+    // Browser-Fehlermeldung. So können wir das Panel rechtzeitig öffnen.
     // =========================================================================
 
     container.find('.yform-accordion-relation').each(function () {
         var $relation = $(this);
-        var $form = $relation.closest('form');
-        if (!$form.length || $form.data('accordion-submit-bound')) return;
+        var errorMsg = $relation.attr('data-yform-accordion-i18n-error') || 'Please check the input';
 
-        $form.data('accordion-submit-bound', true);
-        $form.on('submit', function () {
-            var errorMsg = $relation.attr('data-yform-accordion-i18n-error') || 'Please check the input';
+        // invalid-Event auf allen Formularfeldern in Accordion-Items abfangen
+        // (useCapture=true, weil 'invalid' nicht bubbelt)
+        $relation[0].addEventListener('invalid', function (e) {
+            var field = e.target;
+            var $item = $(field).closest('.yform-accordion-item');
+            if (!$item.length) return;
 
-            // Alle Panels mit invaliden required-Feldern finden
-            $form.find('.yform-accordion-item').each(function () {
-                var $item = $(this);
-                var $collapse = $item.find('.panel-collapse').first();
+            var $collapse = $item.find('.panel-collapse').first();
 
-                // Vorherige Fehler-Markierungen entfernen
-                $item.removeClass('yform-accordion-item-error');
-                $item.find('.yform-accordion-error-badge').remove();
+            // Panel öffnen falls geschlossen
+            if (!$collapse.hasClass('in')) {
+                $collapse.addClass('in');
+                $item.find('.yform-accordion-toggle').removeClass('collapsed');
+            }
 
-                // Prüfe ob invalide required-Felder existieren
-                var hasInvalid = false;
-                $collapse.find('input, select, textarea').each(function () {
+            // Error-Styling und Badge
+            if (!$item.hasClass('yform-accordion-item-error')) {
+                $item.addClass('yform-accordion-item-error');
+                var $titleText = $item.find('.yform-accordion-title-text').first();
+                if (!$item.find('.yform-accordion-error-badge').length) {
+                    $titleText.after('<span class="yform-accordion-error-badge"><i class="rex-icon fa-exclamation-triangle"></i> ' + errorMsg + '</span>');
+                }
+            }
+        }, true); // useCapture = true, da 'invalid' nicht bubbelt
+
+        // Bei erfolgreichem Input: Error-State zurücksetzen
+        $relation.on('input change', 'input, select, textarea', function () {
+            if (this.validity && this.validity.valid) {
+                var $item = $(this).closest('.yform-accordion-item');
+                if (!$item.length) return;
+
+                // Prüfe ob noch andere invalide Felder im Panel existieren
+                var stillInvalid = false;
+                $item.find('.panel-collapse').first().find('input, select, textarea').each(function () {
                     if (this.required && !this.validity.valid) {
-                        hasInvalid = true;
+                        stillInvalid = true;
                         return false;
                     }
                 });
 
-                if (hasInvalid) {
-                    // Panel öffnen falls geschlossen
-                    if (!$collapse.hasClass('in')) {
-                        $collapse.addClass('in');
-                        $item.find('.yform-accordion-toggle').removeClass('collapsed');
-                    }
-                    $item.addClass('yform-accordion-item-error');
-
-                    // Fehler-Badge im Header einfügen
-                    var $titleText = $item.find('.yform-accordion-title-text').first();
-                    if (!$item.find('.yform-accordion-error-badge').length) {
-                        $titleText.after('<span class="yform-accordion-error-badge"><i class="rex-icon fa-exclamation-triangle"></i> ' + errorMsg + '</span>');
-                    }
+                if (!stillInvalid) {
+                    $item.removeClass('yform-accordion-item-error');
+                    $item.find('.yform-accordion-error-badge').remove();
                 }
-            });
+            }
         });
     });
 });

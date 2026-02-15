@@ -29,16 +29,14 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // Fallback: Subform-Inputs sind oft erst nach kurzem Delay befüllt
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initTitleWatcher($(this));
-        });
-    }, 100);
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initTitleWatcher($(this));
-        });
-    }, 500);
+    // Einmaliger konsolidierter Retry statt mehrerer separater Timeouts
+    [100, 500].forEach(function (delay) {
+        setTimeout(function () {
+            container.find('.yform-accordion-item').each(function () {
+                initTitleWatcher($(this));
+            });
+        }, delay);
+    });
 
     function initTitleWatcher($item) {
         var titleFieldName = $item.attr('data-yform-accordion-title-field');
@@ -148,21 +146,13 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // Status per Retry prüfen (Subform-Inputs sind oft erst nach Delay verfügbar)
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusColor($(this));
-        });
-    }, 100);
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusColor($(this));
-        });
-    }, 500);
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusColor($(this));
-        });
-    }, 1000);
+    [100, 500, 1000].forEach(function (delay) {
+        setTimeout(function () {
+            container.find('.yform-accordion-item').each(function () {
+                initStatusColor($(this));
+            });
+        }, delay);
+    });
 
     function findTitleInput($container, fieldName) {
         var selectors = 'input, select, textarea';
@@ -271,7 +261,7 @@ $(document).on('rex:ready', function (event, container) {
 
         // Mögliche Werte ermitteln
         var possibleValues = ['0', '1'];
-        var valueLabels = {'0': 'Offline', '1': 'Online', '2': 'Entwurf'};
+        var valueLabels = {};
         if ($statusInput.is('select')) {
             possibleValues = [];
             $statusInput.find('option').each(function () {
@@ -280,6 +270,8 @@ $(document).on('rex:ready', function (event, container) {
                 valueLabels[v] = $.trim($(this).text()) || v;
             });
         }
+
+        var toggleTpl = $wrapper.attr('data-yform-accordion-i18n-toggle') || '{0}';
 
         function getCurrentVal() {
             if ($statusInput.is('input[type="checkbox"]')) {
@@ -292,7 +284,7 @@ $(document).on('rex:ready', function (event, container) {
             var val = getCurrentVal();
             $toggleBtn.attr('data-status-val', val);
             var label = valueLabels[val] || ('Status: ' + val);
-            $toggleBtn.attr('title', label + ' – Klicken zum Umschalten');
+            $toggleBtn.attr('title', toggleTpl.replace('{0}', label));
         }
 
         syncToggleBtn();
@@ -332,16 +324,13 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // Retry für verzögert geladene Subforms
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusToggle($(this));
-        });
-    }, 200);
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusToggle($(this));
-        });
-    }, 600);
+    [200, 600].forEach(function (delay) {
+        setTimeout(function () {
+            container.find('.yform-accordion-item').each(function () {
+                initStatusToggle($(this));
+            });
+        }, delay);
+    });
 
     // =========================================================================
     // DELETE (nutzt REDAXO data-confirm für Bestätigung)
@@ -435,7 +424,6 @@ $(document).on('rex:ready', function (event, container) {
                 $wrapper = $btn.closest('.yform-accordion-relation');
             }
 
-            var id = $wrapper.attr('id');
             var relationKey = $wrapper.attr('data-yform-accordion-key');
             var prototypeForm = $wrapper.attr('data-yform-accordion-form');
             var index = parseInt($wrapper.attr('data-yform-accordion-index'), 10);
@@ -453,9 +441,7 @@ $(document).on('rex:ready', function (event, container) {
             // Titel aktualisieren
             $newItem.find('.yform-accordion-title-text').first().text(newLabel + ' #' + index);
 
-            // Panel aufklappen
-            $newItem.find('.panel-collapse').addClass('in');
-            $newItem.find('.yform-accordion-toggle').removeClass('collapsed');
+            // Panel-Klassen sind bereits korrekt im Prototyp-Template gesetzt
 
             // Einfügeposition bestimmen
             var insertPosition = $btn.attr('data-yform-accordion-add-position');
@@ -498,10 +484,6 @@ $(document).on('rex:ready', function (event, container) {
         });
     });
 
-
-    // =========================================================================
-    // DUPLICATE: Eintrag duplizieren
-    // =========================================================================
 
     // =========================================================================
     // VALIDATION ERROR: Panels mit Fehlern auto-öffnen
@@ -663,7 +645,7 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // Doppelklick auf Label: alle Panels toggle
-    container.find('.yform-accordion-relation > .control-label').on('dblclick', function () {
+    container.find('.yform-accordion-relation .control-label').on('dblclick', function () {
         var $wrapper = $(this).closest('.yform-accordion-relation');
         var $panels = $wrapper.find('.panel-collapse');
         var allOpen = $panels.filter('.in').length === $panels.length;

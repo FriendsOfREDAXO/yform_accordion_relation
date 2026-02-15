@@ -358,9 +358,12 @@ $(document).on('rex:ready', function (event, container) {
         var targetId = $btn.attr('data-yform-accordion-delete');
         var $panel = $('#' + targetId);
         var $wrapper = $panel.closest('[data-yform-accordion-items]');
-        var title = $.trim($panel.find('.yform-accordion-title-text').first().text()) || 'Eintrag';
+        var $relation = $panel.closest('.yform-accordion-relation');
+        var entryFallback = $relation.attr('data-yform-accordion-i18n-entry') || 'Entry';
+        var confirmTpl = $relation.attr('data-yform-accordion-i18n-confirm') || 'Really delete "{0}"?';
+        var title = $.trim($panel.find('.yform-accordion-title-text').first().text()) || entryFallback;
 
-        if (!confirm('"' + title + '" wirklich l\u00f6schen?')) {
+        if (!confirm(confirmTpl.replace('{0}', title))) {
             return;
         }
 
@@ -436,7 +439,7 @@ $(document).on('rex:ready', function (event, container) {
             var relationKey = $wrapper.attr('data-yform-accordion-key');
             var prototypeForm = $wrapper.attr('data-yform-accordion-form');
             var index = parseInt($wrapper.attr('data-yform-accordion-index'), 10);
-            var newLabel = $wrapper.attr('data-yform-accordion-new-label') || 'Neuer Eintrag';
+            var newLabel = $wrapper.attr('data-yform-accordion-new-label') || 'New entry';
 
             ++index;
             $wrapper.attr('data-yform-accordion-index', index);
@@ -524,9 +527,10 @@ $(document).on('rex:ready', function (event, container) {
     function updateCounter($wrapper) {
         var $relation = $wrapper.closest('.yform-accordion-relation');
         var count = $wrapper.find('> .yform-accordion-item').length;
+        var countLabel = $relation.attr('data-yform-accordion-i18n-count') || 'entries';
         var $counter = $relation.find('[data-yform-accordion-count]');
         if ($counter.length) {
-            $counter.find('small').text(count + ' Einträge');
+            $counter.find('small').text(count + ' ' + countLabel);
         }
     }
 
@@ -615,13 +619,16 @@ $(document).on('rex:ready', function (event, container) {
         }
 
         // Counter aktualisieren
+        var $relation = $wrapper.closest('.yform-accordion-relation');
+        var countLabel = $relation.attr('data-yform-accordion-i18n-count') || 'entries';
+        var noResultsTpl = $relation.attr('data-yform-accordion-i18n-noresults') || 'No results for "{0}"';
         var $counter = $wrapper.find('[data-yform-accordion-count]');
         if ($counter.length) {
             var total = $items.length;
             if (query !== '' && visibleCount < total) {
-                $counter.find('small').text(visibleCount + ' / ' + total + ' Einträge');
+                $counter.find('small').text(visibleCount + ' / ' + total + ' ' + countLabel);
             } else {
-                $counter.find('small').text(total + ' Einträge');
+                $counter.find('small').text(total + ' ' + countLabel);
             }
         }
 
@@ -629,8 +636,9 @@ $(document).on('rex:ready', function (event, container) {
         var $noResults = $wrapper.find('.yform-accordion-no-results');
         if (query !== '' && visibleCount === 0) {
             if (!$noResults.length) {
+                var noResultsMsg = noResultsTpl.replace('{0}', $('<span>').text(query).html());
                 $wrapper.find('[data-yform-accordion-items]').first().after(
-                    '<div class="yform-accordion-no-results"><p class="text-muted text-center" style="padding: 15px 0;"><i class="rex-icon fa-search"></i> Keine Treffer für "' + $('<span>').text(query).html() + '"</p></div>'
+                    '<div class="yform-accordion-no-results"><p class="text-muted text-center" style="padding: 15px 0;"><i class="rex-icon fa-search"></i> ' + noResultsMsg + '</p></div>'
                 );
             }
         } else {

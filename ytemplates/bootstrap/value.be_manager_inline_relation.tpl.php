@@ -204,7 +204,11 @@ echo '
          data-yform-accordion-index="' . count($forms) . '"
          data-yform-accordion-new-label="' . rex_escape($newLabel) . '"
          data-yform-accordion-title-field="' . rex_escape($titleField) . '"
-         data-yform-accordion-status-field="' . rex_escape($statusField) . '">
+         data-yform-accordion-status-field="' . rex_escape($statusField) . '"
+         data-yform-accordion-i18n-entry="' . rex_escape(rex_i18n::msg('yform_accordion_relation_entry_fallback')) . '"
+         data-yform-accordion-i18n-confirm="' . rex_escape(rex_i18n::msg('yform_accordion_relation_confirm_delete')) . '"
+         data-yform-accordion-i18n-count="' . rex_escape(rex_i18n::msg('yform_accordion_relation_count_label')) . '"
+         data-yform-accordion-i18n-noresults="' . rex_escape(rex_i18n::msg('yform_accordion_relation_no_results')) . '">
         <label class="control-label" for="' . $this->getFieldId() . '">' . $this->getLabel() . '</label>
         <div class="yform-accordion-container">
             <div class="yform-accordion-toolbar">

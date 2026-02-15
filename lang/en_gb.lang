@@ -16,4 +16,7 @@ yform_accordion_relation_expand_all = Expand all
 yform_accordion_relation_collapse_all = Collapse all
 yform_accordion_relation_empty = No entries available
 yform_accordion_relation_delete_confirm = Click = permanently delete
+yform_accordion_relation_entry_fallback = Entry
+yform_accordion_relation_confirm_delete = Really delete "{0}"?
+yform_accordion_relation_no_results = No results for "{0}"
 yform_accordion_relation_info = Extends be_manager_relation (type 5 = inline) with accordion display. Activation via attribute: {"accordion": true}. No custom value – template overrides only.

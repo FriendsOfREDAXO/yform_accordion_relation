@@ -29,16 +29,14 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // Fallback: Subform-Inputs sind oft erst nach kurzem Delay befüllt
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initTitleWatcher($(this));
-        });
-    }, 100);
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initTitleWatcher($(this));
-        });
-    }, 500);
+    // Einmaliger konsolidierter Retry statt mehrerer separater Timeouts
+    [100, 500].forEach(function (delay) {
+        setTimeout(function () {
+            container.find('.yform-accordion-item').each(function () {
+                initTitleWatcher($(this));
+            });
+        }, delay);
+    });
 
     function initTitleWatcher($item) {
         var titleFieldName = $item.attr('data-yform-accordion-title-field');
@@ -148,21 +146,13 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // Status per Retry prüfen (Subform-Inputs sind oft erst nach Delay verfügbar)
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusColor($(this));
-        });
-    }, 100);
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusColor($(this));
-        });
-    }, 500);
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusColor($(this));
-        });
-    }, 1000);
+    [100, 500, 1000].forEach(function (delay) {
+        setTimeout(function () {
+            container.find('.yform-accordion-item').each(function () {
+                initStatusColor($(this));
+            });
+        }, delay);
+    });
 
     function findTitleInput($container, fieldName) {
         var selectors = 'input, select, textarea';
@@ -271,7 +261,7 @@ $(document).on('rex:ready', function (event, container) {
 
         // Mögliche Werte ermitteln
         var possibleValues = ['0', '1'];
-        var valueLabels = {'0': 'Offline', '1': 'Online', '2': 'Entwurf'};
+        var valueLabels = {};
         if ($statusInput.is('select')) {
             possibleValues = [];
             $statusInput.find('option').each(function () {
@@ -280,6 +270,8 @@ $(document).on('rex:ready', function (event, container) {
                 valueLabels[v] = $.trim($(this).text()) || v;
             });
         }
+
+        var toggleTpl = $wrapper.attr('data-yform-accordion-i18n-toggle') || '{0}';
 
         function getCurrentVal() {
             if ($statusInput.is('input[type="checkbox"]')) {
@@ -291,8 +283,8 @@ $(document).on('rex:ready', function (event, container) {
         function syncToggleBtn() {
             var val = getCurrentVal();
             $toggleBtn.attr('data-status-val', val);
-            var label = valueLabels[val] || ('Status: ' + val);
-            $toggleBtn.attr('title', label + ' – Klicken zum Umschalten');
+            var label = valueLabels[val] || val;
+            $toggleBtn.attr('title', toggleTpl.replace('{0}', label));
         }
 
         syncToggleBtn();
@@ -332,16 +324,13 @@ $(document).on('rex:ready', function (event, container) {
     });
 
     // Retry für verzögert geladene Subforms
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusToggle($(this));
-        });
-    }, 200);
-    setTimeout(function () {
-        container.find('.yform-accordion-item').each(function () {
-            initStatusToggle($(this));
-        });
-    }, 600);
+    [200, 600].forEach(function (delay) {
+        setTimeout(function () {
+            container.find('.yform-accordion-item').each(function () {
+                initStatusToggle($(this));
+            });
+        }, delay);
+    });
 
     // =========================================================================
     // DELETE (nutzt REDAXO data-confirm für Bestätigung)
@@ -435,7 +424,6 @@ $(document).on('rex:ready', function (event, container) {
                 $wrapper = $btn.closest('.yform-accordion-relation');
             }
 
-            var id = $wrapper.attr('id');
             var relationKey = $wrapper.attr('data-yform-accordion-key');
             var prototypeForm = $wrapper.attr('data-yform-accordion-form');
             var index = parseInt($wrapper.attr('data-yform-accordion-index'), 10);
@@ -453,9 +441,7 @@ $(document).on('rex:ready', function (event, container) {
             // Titel aktualisieren
             $newItem.find('.yform-accordion-title-text').first().text(newLabel + ' #' + index);
 
-            // Panel aufklappen
-            $newItem.find('.panel-collapse').addClass('in');
-            $newItem.find('.yform-accordion-toggle').removeClass('collapsed');
+            // Panel-Klassen sind bereits korrekt im Prototyp-Template gesetzt
 
             // Einfügeposition bestimmen
             var insertPosition = $btn.attr('data-yform-accordion-add-position');
@@ -500,24 +486,31 @@ $(document).on('rex:ready', function (event, container) {
 
 
     // =========================================================================
-    // DUPLICATE: Eintrag duplizieren
-    // =========================================================================
-
-    // =========================================================================
     // VALIDATION ERROR: Panels mit Fehlern auto-öffnen
     // =========================================================================
 
-    container.find('.yform-accordion-item').each(function () {
-        var $item = $(this);
-        var $body = $item.find('.yform-accordion-body');
+    container.find('.yform-accordion-relation').each(function () {
+        var $relation = $(this);
+        var errorMsg = $relation.attr('data-yform-accordion-i18n-error') || '';
 
-        // Prüfen ob im Panel Fehler-Markierungen vorhanden sind
-        if ($body.find('.has-error, .form-error, .text-warning, .alert-danger').length > 0) {
-            var $collapse = $item.find('.panel-collapse');
-            $collapse.addClass('in');
-            $item.find('.yform-accordion-toggle').removeClass('collapsed');
-            $item.addClass('yform-accordion-item-error');
-        }
+        $relation.find('.yform-accordion-item').each(function () {
+            var $item = $(this);
+            var $body = $item.find('.yform-accordion-body');
+
+            // Prüfen ob im Panel Fehler-Markierungen vorhanden sind
+            if ($body.find('.has-error, .form-error, .text-warning, .alert-danger').length > 0) {
+                var $collapse = $item.find('.panel-collapse');
+                $collapse.addClass('in');
+                $item.find('.yform-accordion-toggle').removeClass('collapsed');
+                $item.addClass('yform-accordion-item-error');
+
+                // Error-Badge im Header einfügen
+                if (errorMsg && !$item.find('.yform-accordion-error-badge').length) {
+                    var $titleText = $item.find('.yform-accordion-title-text').first();
+                    $titleText.after('<span class="yform-accordion-error-badge"><i class="rex-icon fa-exclamation-triangle"></i> ' + errorMsg + '</span>');
+                }
+            }
+        });
     });
 
     // =========================================================================
@@ -673,5 +666,65 @@ $(document).on('rex:ready', function (event, container) {
         } else {
             $panels.collapse('show');
         }
+    });
+
+    // =========================================================================
+    // FORM VALIDATION: Panels mit invaliden required-Feldern öffnen
+    // Das 'invalid'-Event feuert VOR dem submit-Event und VOR der
+    // Browser-Fehlermeldung. So können wir das Panel rechtzeitig öffnen.
+    // =========================================================================
+
+    container.find('.yform-accordion-relation').each(function () {
+        var $relation = $(this);
+        var errorMsg = $relation.attr('data-yform-accordion-i18n-error') || '';
+
+        // invalid-Event auf allen Formularfeldern in Accordion-Items abfangen
+        // (useCapture=true, weil 'invalid' nicht bubbelt)
+        $relation[0].addEventListener('invalid', function (e) {
+            var field = e.target;
+            var $item = $(field).closest('.yform-accordion-item');
+            if (!$item.length) return;
+
+            var $collapse = $item.find('.panel-collapse').first();
+
+            // Panel öffnen falls geschlossen – Bootstrap-Methode für korrektes Layout
+            if (!$collapse.hasClass('in')) {
+                $collapse.removeClass('collapse').addClass('collapse in');
+                $collapse.css('height', '');
+                $item.find('.yform-accordion-toggle').removeClass('collapsed');
+                $collapse[0].offsetHeight; // Reflow erzwingen
+            }
+
+            // Error-Styling und Badge
+            if (!$item.hasClass('yform-accordion-item-error')) {
+                $item.addClass('yform-accordion-item-error');
+                if (errorMsg && !$item.find('.yform-accordion-error-badge').length) {
+                    var $titleText = $item.find('.yform-accordion-title-text').first();
+                    $titleText.after('<span class="yform-accordion-error-badge"><i class="rex-icon fa-exclamation-triangle"></i> ' + errorMsg + '</span>');
+                }
+            }
+        }, true); // useCapture = true, da 'invalid' nicht bubbelt
+
+        // Bei erfolgreichem Input: Error-State zurücksetzen
+        $relation.on('input change', 'input, select, textarea', function () {
+            if (this.validity && this.validity.valid) {
+                var $item = $(this).closest('.yform-accordion-item');
+                if (!$item.length) return;
+
+                // Prüfe ob noch andere invalide Felder im Panel existieren
+                var stillInvalid = false;
+                $item.find('.panel-collapse').first().find('input, select, textarea').each(function () {
+                    if (this.required && !this.validity.valid) {
+                        stillInvalid = true;
+                        return false;
+                    }
+                });
+
+                if (!stillInvalid) {
+                    $item.removeClass('yform-accordion-item-error');
+                    $item.find('.yform-accordion-error-badge').remove();
+                }
+            }
+        });
     });
 });

@@ -246,6 +246,24 @@
     color: #a94442;
 }
 
+.yform-accordion-error-badge {
+    display: inline-block;
+    background-color: #d9534f;
+    color: #fff;
+    border-radius: 4px;
+    margin-left: 8px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+    vertical-align: middle;
+}
+
+.yform-accordion-error-badge .rex-icon {
+    margin-right: 3px;
+}
+
 /* ==========================================================================
    New Item Highlight
    ========================================================================== */
@@ -530,6 +548,14 @@ body.rex-theme-dark .yform-accordion-body .yform-accordion-relation {
     border-left-color: #333;
 }
 
+body.rex-theme-dark .yform-accordion-item-error > .panel-heading {
+    background-color: rgba(217, 83, 79, 0.1);
+}
+
+body.rex-theme-dark .yform-accordion-item-error .yform-accordion-title-text {
+    color: #e27c79;
+}
+
 /* --- Auto Dark Mode --- */
 @media (prefers-color-scheme: dark) {
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item > .panel-heading:hover {
@@ -588,5 +614,13 @@ body.rex-theme-dark .yform-accordion-body .yform-accordion-relation {
 
     body.rex-has-theme:not(.rex-theme-light) .yform-accordion-body .yform-accordion-relation {
         border-left-color: #333;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item-error > .panel-heading {
+        background-color: rgba(217, 83, 79, 0.1);
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .yform-accordion-item-error .yform-accordion-title-text {
+        color: #e27c79;
     }
 }

@@ -208,7 +208,9 @@ echo '
          data-yform-accordion-i18n-entry="' . rex_escape(rex_i18n::msg('yform_accordion_relation_entry_fallback')) . '"
          data-yform-accordion-i18n-confirm="' . rex_escape(rex_i18n::msg('yform_accordion_relation_confirm_delete')) . '"
          data-yform-accordion-i18n-count="' . rex_escape(rex_i18n::msg('yform_accordion_relation_count_label')) . '"
-         data-yform-accordion-i18n-noresults="' . rex_escape(rex_i18n::msg('yform_accordion_relation_no_results')) . '">
+         data-yform-accordion-i18n-noresults="' . rex_escape(rex_i18n::msg('yform_accordion_relation_no_results')) . '"
+         data-yform-accordion-i18n-toggle="' . rex_escape(rex_i18n::msg('yform_accordion_relation_status_toggle')) . '"
+         data-yform-accordion-i18n-error="' . rex_escape(rex_i18n::msg('yform_accordion_relation_validation_error')) . '">
         <label class="control-label" for="' . $this->getFieldId() . '">' . $this->getLabel() . '</label>
         <div class="yform-accordion-container">
             <div class="yform-accordion-toolbar">

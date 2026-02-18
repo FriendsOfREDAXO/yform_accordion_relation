@@ -37,8 +37,11 @@ if (!$accordion) {
         $originalTemplatePaths,
         function(string $path) { return !str_ends_with($path, '/yform_accordion_relation/ytemplates'); },
     ));
-    echo $this->parse($template, $params);
-    rex_yform::$TemplatePaths = $originalTemplatePaths;
+    try {
+        echo $this->parse($template, $params);
+    } finally {
+        rex_yform::$TemplatePaths = $originalTemplatePaths;
+    }
     return;
 
 }

@@ -44,12 +44,15 @@ if (!$isAccordion) {
      * Pfade wieder auf den vollen Satz zurücksetzen
      */
     $originalTemplatePaths = rex_yform::$TemplatePaths;
-    rex_yform::$TemplatePaths = array_values(array_filter(
-        $originalTemplatePaths,
-        function(string $path) { return !str_ends_with($path,'yform_accordion_relation/ytemplates');},
-    ));
-    echo $this->parse($template, $params);
-    rex_yform::$TemplatePaths = $originalTemplatePaths;
+    try {
+        rex_yform::$TemplatePaths = array_values(array_filter(
+            $originalTemplatePaths,
+            function(string $path) { return !str_ends_with($path,'yform_accordion_relation/ytemplates');},
+        ));
+        echo $this->parse($template, $params);
+    } finally {
+        rex_yform::$TemplatePaths = $originalTemplatePaths;
+    }
     return;
 
 }

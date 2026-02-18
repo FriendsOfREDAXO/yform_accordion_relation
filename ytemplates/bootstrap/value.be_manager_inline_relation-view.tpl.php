@@ -51,7 +51,6 @@ if (!$isAccordion) {
         rex_yform::$TemplatePaths = $originalTemplatePaths;
     }
     return;
-    
 }
 
 // ===================================================================

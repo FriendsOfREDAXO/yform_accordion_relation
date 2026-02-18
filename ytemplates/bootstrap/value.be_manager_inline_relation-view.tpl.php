@@ -32,26 +32,24 @@ $fieldkey = 'y' . sha1($fieldkey . '-' . rex_escape($relationKey));
 // Kein Accordion? → Original-Verhalten 1:1
 // -------------------------------------------------------------------
 if (!$isAccordion) {
-    $id = sprintf('%u', crc32($this->params['form_name'])) . random_int(0, 10000) . $this->getId();
 
-    echo '
-    <div class="' . $class_group . '" id="' . $fieldkey . '" data-yform-be-relation-key="' . rex_escape($relationKey) . '" data-yform-be-relation-index="' . count($forms) . '">
-        <label class="control-label" for="' . $this->getFieldId() . '">' . $this->getLabelStyle($this->getLabel()) . ' </label>
-        <div data-yform-be-relation-item="' . $fieldkey . '" class="yform-be-relation-wrapper">';
-
-    $counter = 1;
-    foreach ($forms as $form) {
-        $counterfieldkey = $fieldkey . '-' . $counter;
-        echo '<div class="row" id="' . $counterfieldkey . '" data-yform-be-relation-item="' . $counterfieldkey . '">
-                <div class="yform-be-relation-inline-form">' . $form . '</div>
-            </div>';
-        ++$counter;
+    /**
+     * Den eigenen Pfad aus dem Template-Path entfernen
+     * Mit den verbliebenen über den internen Mechanismus das Feld rendern
+     * Pfade wieder auf den vollen Satz zurücksetzen
+     */
+    $originalTemplatePaths = rex_yform::$TemplatePaths;
+    rex_yform::$TemplatePaths = array_values(array_filter(
+        $originalTemplatePaths,
+        function (string $path) {
+            return !str_ends_with($path, 'yform_accordion_relation/ytemplates');
+        },
+    ));
+    try {
+        echo $this->parse($template, $params);
+    } finally {
+        rex_yform::$TemplatePaths = $originalTemplatePaths;
     }
-
-    echo '
-        </div>
-    </div>';
-
     return;
 }
 

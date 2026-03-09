@@ -42,7 +42,7 @@ if (!$isAccordion) {
     rex_yform::$TemplatePaths = array_values(array_filter(
         $originalTemplatePaths,
         function (string $path) {
-            return !str_ends_with($path, 'yform_accordion_relation/ytemplates');
+            return !str_ends_with($path, '/yform_accordion_relation/ytemplates');
         },
     ));
     try {

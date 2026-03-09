@@ -26,16 +26,15 @@ $accordionTitleField ??= '';
 // Kein Accordion? → Original-Verhalten 1:1
 // -------------------------------------------------------------------
 if (!$accordion) {
-
     /**
      * Den eigenen Pfad aus dem Template-Path entfernen
      * Mit den verbliebenen über den internen Mechanismus das Feld rendern
-     * Pfade wieder auf den vollen Satz zurücksetzen
+     * Pfade wieder auf den vollen Satz zurücksetzen.
      */
     $originalTemplatePaths = rex_yform::$TemplatePaths;
     rex_yform::$TemplatePaths = array_values(array_filter(
         $originalTemplatePaths,
-        function(string $path) { return !str_ends_with($path, '/yform_accordion_relation/ytemplates'); },
+        static function (string $path) { return !str_ends_with($path, '/yform_accordion_relation/ytemplates'); },
     ));
     try {
         echo $this->parse($template, $params);
@@ -43,7 +42,6 @@ if (!$accordion) {
         rex_yform::$TemplatePaths = $originalTemplatePaths;
     }
     return;
-
 }
 
 // ===================================================================
@@ -55,9 +53,7 @@ $collapsedClass = $accordionIsOpen ? '' : 'collapsed';
 $inClass = $accordionIsOpen ? ' in' : '';
 $newClass = $accordionIsNew ? ' yform-accordion-item-new' : '';
 
-/**
- * Toolbar für das Item zusammenstellen.
- */
+/** Toolbar für das Item zusammenstellen. */
 // Status-Toggle
 $toolbarButton = [
     '<button type="button" class="btn btn-xs yform-accordion-status-toggle" data-yform-accordion-status-toggle="' . $counterfieldkey . '" data-status-val="" title="Status umschalten" style="display:none"><span class="yform-status-dot"></span></button>',
@@ -67,13 +63,13 @@ $toolbarButton = [
 $sorthandle = '';
 if ('' !== $prioFieldName) {
     $sorthandle = '<span class="yform-accordion-sorthandle"><i class="rex-icon fa-bars"></i></span>';
-    $toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-moveup="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_move_up')) . '"><i class="rex-icon rex-icon-up"></i></button>';
-    $toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-movedown="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_move_down')) . '"><i class="rex-icon rex-icon-down"></i></button>';
+    $toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-moveup="' . $counterfieldkey . '" title="' . rex_i18n::msg('yform_accordion_relation_move_up') . '"><i class="rex-icon rex-icon-up"></i></button>';
+    $toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-movedown="' . $counterfieldkey . '" title="' . rex_i18n::msg('yform_accordion_relation_move_down') . '"><i class="rex-icon rex-icon-down"></i></button>';
 }
 
 // add und delete
-$toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-add="' . $counterfieldkey . '" data-yform-accordion-add-position="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_add')) . '"><i class="rex-icon rex-icon-add-module"></i></button>';
-$toolbarButton[] = '<button type="button" class="btn btn-xs btn-danger" data-yform-accordion-delete="' . $counterfieldkey . '" title="' . rex_escape(rex_i18n::msg('yform_accordion_relation_delete')) . '"><i class="rex-icon rex-icon-delete"></i></button>';
+$toolbarButton[] = '<button type="button" class="btn btn-xs btn-default" data-yform-accordion-add="' . $counterfieldkey . '" data-yform-accordion-add-position="' . $counterfieldkey . '" title="' . rex_i18n::msg('yform_accordion_relation_add') . '"><i class="rex-icon rex-icon-add-module"></i></button>';
+$toolbarButton[] = '<button type="button" class="btn btn-xs btn-danger" data-yform-accordion-delete="' . $counterfieldkey . '" title="' . rex_i18n::msg('yform_accordion_relation_delete') . '"><i class="rex-icon rex-icon-delete"></i></button>';
 
 // Custom
 $toolbarButton = rex_extension::registerPoint(

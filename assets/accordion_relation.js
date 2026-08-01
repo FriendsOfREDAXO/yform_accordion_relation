@@ -400,7 +400,7 @@ $(document).on('rex:ready', function (event, container) {
                 handle: '.yform-accordion-sorthandle',
                 items: '> .yform-accordion-item',
                 axis: 'y',
-                opacity: 0.7,
+                opacity: 0,
                 placeholder: 'yform-accordion-sortable-placeholder',
                 tolerance: 'pointer'
             });
